@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Recipe Cookbook Test</title>
+    </head>
+    <body>
+        <h1>Recipe Cookbook Test</h1>
+        <form action="/" method="POST">
+            <input type="text" name="recipe_query" id="recipe_query">
+            <input type="submit" value="Search">
+            <a href="/home" class="home-button">Home</a>
+        </form>
+
+        {% if recipes%}
+        <h2>Results for "{{ recipe_query }}"</h2>
+        <ul>
+            {% for recipe in recipes %}
+            <li>
+                <h3 class="recipe-title">{{ recipe.title }}</h3>
+                {% if recipe.image %}
+                <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+                {% endif %}
+                <a href="{{ url_for('view_recipe', recipe_id=recipe.id, recipe_query=recipe_query) }}">View</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No recipes found</p>
+        {% endif %}
+    </body>
+</html>
