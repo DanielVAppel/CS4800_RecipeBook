@@ -10,18 +10,18 @@ const carouselConfig = {
 		focusMaskDelay: 100,
 		heroDelay: 50,
 	},
-	scrollSpeed: 1000,
+	scrollSpeed: 750,
 	minimumTimeBetweenScrolls: 600,
 	lastScrollTimestamp: new Date().getTime(),
 };
 
 // creates the "Check Recipe" text underneath selected recommended recipe
-const createItemText = () => {
+const createItemText = (focusedItem) => {
 	const itemText = document.createElement("div");
 	itemText.classList.add("itemText");
 
 	const anchor = document.createElement("a");
-	anchor.href = "/";
+	anchor.href = focusedItem.dataset.source;
 
 	const span = document.createElement("span");
 	span.classList.add("fontSubtitle");
@@ -33,6 +33,22 @@ const createItemText = () => {
 	return itemText;
 };
 
+const reduceMinutes = (minutes) => {
+	console.log(minutes);
+	if (minutes < 60) {
+		return `${minutes} min`;
+	} else {
+		const hours = Math.floor(minutes / 60);
+		const remainingTime = minutes % 60;
+
+		if (remainingTime === 0) {
+			return `${hours} hr`;
+		} else {
+			return `${hours} hr ${remainingTime} min`;
+		}
+	}
+};
+
 document.addEventListener("DOMContentLoaded", function () {
 	// handle user selection in recommended recipes
 	const root = document.documentElement,
@@ -40,10 +56,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		heroImage = document.getElementById("heroImage"),
 		heroTextWrapper = document.getElementById("heroTextWrapper"),
 		heroTitle = document.querySelector(".heroTitle"),
-		heroSubtitle = document.querySelector(".heroSubtitle"),
+		subsectionServings = document.querySelector(".heroSubsection > .fontSubtitle"),
+		// ready in minutes (RIM)
+		subsectionRIM = document.querySelector(".heroSubsection > .hollowBox > .fontSubtitle"),
+		heroSubtitle = document.querySelector(".heroSubtitle > .fontSubtitle"),
 		heroDescription = document.querySelector(".heroDescription");
-
-	const itemText = createItemText();
 
 	const {
 		timing: { itemFocus, focusMaskDelay, heroDelay },
@@ -79,6 +96,8 @@ document.addEventListener("DOMContentLoaded", function () {
 			if (itemText) item.removeChild(itemText);
 		});
 
+		const itemText = createItemText(focusedItem);
+
 		// "select" the recipe
 		focusedItem.classList.add("selectedItem");
 		focusedItem.appendChild(itemText);
@@ -88,13 +107,15 @@ document.addEventListener("DOMContentLoaded", function () {
 		heroImage.style.opacity = 0;
 
 		setTimeout(() => {
-			const { title, image, description } = focusedItem.dataset;
+			const { id, title, image, servings, cookingtime, description, cuisines } = focusedItem.dataset;
 
 			heroImage.style.opacity = 1;
 			heroImage.style.backgroundImage = `url("${image}")`;
 
 			// change hero text/image according to focused item
 			heroTitle.textContent = title;
+			subsectionServings.textContent = `${servings} Serving${servings > 1 ? "s" : ""}`;
+			subsectionRIM.textContent = reduceMinutes(cookingtime);
 			heroSubtitle.textContent = recipeOfTheDay ? "Recipe of the Day" : "Recommended Recipe";
 			heroDescription.textContent = description;
 		}, itemFocus + heroDelay);
@@ -122,8 +143,4 @@ document.addEventListener("DOMContentLoaded", function () {
 	(initScript = () => {
 		focusItem(carouselItems[0], true); // initial call to set selectedItem
 	})();
-});
-
-document.body.addEventListener("click", function (event) {
-	// console.log(event.target.closest(".carouselItem"));
 });

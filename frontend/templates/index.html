@@ -23,7 +23,15 @@
 				<div class="heroTextContainer fontWhite">
 					<div id="heroTextWrapper" class="heroTextWrapper">
 						<span class="heroTitle fontTitle">{{ recommendedRecipes[0].title }}</span>
-						<span class="heroSubtitle fontSubtitle">Recipe of the day</span>
+						<div class="heroSubsection fontGrey">
+							<span class="fontSubtitle">{{ recommendedRecipes[0].servings }} Servings</span>
+							<div class="hollowBox">
+								<span class="fontSubtitle">Ready in {{ recommendedRecipes[0].readyInMinutes }}M</span>
+							</div>
+						</div>
+						<div class="heroSubtitle">
+							<span class="fontSubtitle">Recipe of the day</span>
+						</div>
 						<span class="heroDescription fontDescription fontGrey">{{ recommendedRecipes[0].summary }}</span>
 					</div>
 				</div>
@@ -37,7 +45,17 @@
 				</div>
 				<ul class="recipeCarousel">
 					{% for recipe in recommendedRecipes %}
-					<li class="carouselItem" data-title="{{ recipe.title }}" data-image="{{ recipe.image }}" data-description="{{ recipe.summary }}">
+					<li
+						class="carouselItem"
+						data-id="{{ recipe.id }}"
+						data-title="{{ recipe.title }}"
+						data-image="{{ recipe.image }}"
+						data-servings="{{ recipe.servings }}"
+						data-cookingtime="{{ recipe.readyInMinutes }}"
+						data-description="{{ recipe.summary }}"
+						data-source="{{ recipe.spoonacularSourceUrl }}"
+						data-cuisines=" {{ recipe.cuisines }}"
+					>
 						<a href="{{ recipe.spoonacularSourceUrl }}" class="itemImageWrapper">
 							<div class="itemImage">
 								<img src="{{ recipe.image }}" alt="{{ recipe.name }}" />

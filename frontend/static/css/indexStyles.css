@@ -5,6 +5,7 @@
 	--ebony-50: rgba(23, 23, 23, 0.5);
 
 	--alto: rgb(215, 215, 215);
+	--alto-80: rgba(215, 215, 215, 0.8);
 	--alto-50: rgba(215, 215, 215, 0.5);
 	--alto-30: rgba(215, 215, 215, 0.3);
 	--alto-10: rgba(215, 215, 215, 0.1);
@@ -119,11 +120,11 @@ ul {
 	height: 100%;
 
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 2fr 1fr;
 }
 
 .heroTextContainer {
-	width: clamp(200px, 50%, 600px);
+	width: clamp(200px, 80%, 600px);
 	margin: auto;
 
 	z-index: 10;
@@ -138,14 +139,33 @@ ul {
 }
 
 .heroTitle {
-	margin-bottom: 1rem;
+	margin-bottom: 0.25rem;
+}
+
+.heroSubsection {
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+	align-items: center;
+
+	margin-bottom: 0.75rem;
+}
+
+.hollowBox {
+	color: var(--alto-80);
+
+	padding: 0.25rem;
+	border: 1px solid var(--alto-30);
+	border-radius: 0.25rem;
 }
 
 .heroSubtitle {
-	margin-bottom: 1.5rem;
+	margin-bottom: 0.75rem;
 }
 
 .heroDescription {
+	width: 70%;
+
 	display: -webkit-box;
 	-webkit-line-clamp: 4;
 	-webkit-box-orient: vertical;
@@ -178,7 +198,7 @@ ul {
 }
 
 .heroContainer > .imageMask {
-	background: linear-gradient(to right, rgb(0 0 0 / 95%) 30%, rgb(0 0 0 / 0%) 80%);
+	background: linear-gradient(to right, rgb(0 0 0 / 95%) 20%, rgb(0 0 0 / 0%) 80%);
 }
 
 .heroContainer > .imageBottomFade {
@@ -204,7 +224,7 @@ ul {
 
 .carouselCategory {
 	margin-left: 0.5rem;
-    margin-bottom: 0.5rem;
+	margin-bottom: 0.5rem;
 }
 
 .recipeCarousel {
@@ -340,8 +360,21 @@ ul {
 		height: clamp(500px, 65%, 1000px);
 	}
 
+	.heroContainer {
+		grid-template-columns: 1fr 1fr;
+	}
+	
 	.heroTextContainer {
+		width: clamp(200px, 60%, 800px);
 		padding: 4rem 0 4rem;
+	}
+
+	.heroTitle {
+		margin-bottom: 0.75rem;
+	}
+	
+	.heroSubtitle {
+		margin-bottom: 1.25rem;
 	}
 
 	.recipeCarouselContainer {
