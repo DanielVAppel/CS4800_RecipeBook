@@ -1,0 +1,50 @@
+@font-face {
+    font-family: "Roboto";
+    src: url('../fonts/Roboto-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../fonts/Roboto-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+.fontTitle {
+    font-size: 40px;
+    line-height: 1.3;
+    text-transform: uppercase;
+}
+
+.fontSubtitle {
+    font-size: 20px;
+}
+
+.fontCategory {
+    font-size: 32px;
+}
+
+.fontDescription {
+    font-size: 16px;
+}
+
+.fontWhite {
+    color: rgb(235, 235, 235);
+}
+
+.fontGrey {
+    color: rgba(215, 215, 215, 0.8);
+}
+
+@media screen and (min-width: 1440px) {
+    .fontTitle {
+        font-size: 50px;
+    }
+
+    .fontSubtitle {
+        font-size: 24px;
+        margin-bottom: 0.5rem;
+    }
+}

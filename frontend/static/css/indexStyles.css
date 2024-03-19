@@ -1,0 +1,365 @@
+:root {
+	--mineshaft: rgb(5, 5, 5);
+	--eerie-black: rgb(12, 12, 12);
+	--ebony: rgb(23, 23, 23);
+	--ebony-50: rgba(23, 23, 23, 0.5);
+
+	--alto: rgb(215, 215, 215);
+	--alto-50: rgba(215, 215, 215, 0.5);
+	--alto-30: rgba(215, 215, 215, 0.3);
+	--alto-10: rgba(215, 215, 215, 0.1);
+
+	--silver-chalice: rgb(170, 170, 170);
+	--silver-chalice-20: rgba(170, 170, 170, 0.2);
+
+	--cbz: cubic-bezier(0.694, 0.048, 0.335, 1);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+
+	box-sizing: border-box;
+	scroll-behavior: smooth;
+}
+
+a {
+	text-decoration: none;
+	color: unset;
+	font-family: unset;
+}
+
+body {
+	font-family: "Roboto", sans-serif;
+}
+
+ul {
+	list-style: none;
+}
+
+.fullPageContainer {
+	width: 100vw;
+	height: 100vh;
+
+	display: flex;
+	background-color: var(--mineshaft);
+}
+
+.navContainer {
+	position: relative;
+	height: 100%;
+	width: clamp(50px, 20%, 80px);
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	/* gap: 1rem; */
+
+	background-color: var(--eerie-black);
+}
+
+.navContainer::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+
+	height: 100%;
+	width: 2px;
+
+	background: linear-gradient(transparent, var(--alto-30), transparent);
+}
+
+.navList {
+	position: relative;
+}
+
+.navItem {
+	position: relative;
+	width: 100%;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-block: 1.5rem;
+
+	transition: background-color var(--item-focus);
+}
+
+.navItem:hover {
+	background-color: var(--alto-10);
+}
+
+.navItem > .itemImage {
+	height: 30px;
+	width: 30px;
+}
+
+.navSelectionIndicator {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+
+	height: calc(30px + 1rem);
+	width: 2px;
+
+	transform: translateY(calc(78px + 1rem));
+	background-color: red;
+	transition: transform 650ms;
+}
+
+.mainContainer {
+	height: clamp(500px, 65%, 800px);
+	width: 100%;
+}
+
+.heroContainer {
+	position: relative;
+	height: 100%;
+
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.heroTextContainer {
+	width: clamp(200px, 50%, 600px);
+	margin: auto;
+
+	z-index: 10;
+}
+
+.heroTextWrapper {
+	display: flex;
+	flex-direction: column;
+
+	opacity: 0;
+	transition: opacity var(--hero-fade) var(--cbz);
+}
+
+.heroTitle {
+	margin-bottom: 1rem;
+}
+
+.heroSubtitle {
+	margin-bottom: 1.5rem;
+}
+
+.heroDescription {
+	display: -webkit-box;
+	-webkit-line-clamp: 4;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.heroImage {
+	position: absolute;
+	top: 0;
+	left: 0;
+
+	height: 100%;
+	width: 100%;
+
+	/* background-image: url("../images/dumpCake.jpg"); */
+	background-size: cover;
+	background-position: center center;
+	object-fit: contain;
+
+	transition: opacity var(--hero-fade) var(--cbz);
+}
+
+.imageMask {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.heroContainer > .imageMask {
+	background: linear-gradient(to right, rgb(0 0 0 / 95%) 30%, rgb(0 0 0 / 0%) 80%);
+}
+
+.heroContainer > .imageBottomFade {
+	height: 7.4rem;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+
+	background-image: linear-gradient(180deg, transparent, rgb(0 0 0 / 61%), var(--mineshaft));
+}
+
+.recipeCarouselContainer {
+	width: 100%;
+	padding-inline: 0.75rem;
+	overflow-x: auto;
+	white-space: nowrap;
+
+	user-select: none;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.carouselCategory {
+	margin-left: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.recipeCarousel {
+	display: inline-flex;
+	overflow-y: hidden;
+}
+
+.recipeCarousel::-webkit-scrollbar {
+	height: 0.375rem;
+	width: 0.125rem;
+	display: none;
+}
+
+.recipeCarousel::-webkit-scrollbar-track {
+	background: rgb(23, 23, 23);
+}
+
+.recipeCarousel::-webkit-scrollbar-thumb {
+	background: #aaa;
+	border-radius: 6px;
+}
+
+.recipeCarousel::-webkit-scrollbar-thumb:hover {
+	background: #d7d7d7;
+}
+
+.recipeCarousel > .carouselItem {
+	position: relative;
+	/* 9.5rem (actual height) + 3rem (for potential space)  */
+	max-height: 12.5rem;
+
+	display: flex;
+	flex-direction: column;
+	flex: 0 0 auto;
+
+	padding-top: 0.5rem;
+	padding-inline: 0.5rem;
+
+	background-color: transparent;
+	transition: background-color var(--item-focus);
+}
+
+.recipeCarousel > .carouselItem:first-child {
+	padding-left: 0.5rem;
+}
+
+.recipeCarousel > .carouselItem:last-child {
+	padding-right: 0.5rem;
+}
+
+.recipeCarousel > .carouselItem.selectedItem {
+	background-color: #ccc;
+}
+
+.recipeCarousel > .carouselItem:not(.selectedItem):hover {
+	background-color: var(--silver-chalice-20);
+}
+
+.recipeCarousel > .carouselItem.selectedItem > .itemTextWrapper {
+	position: relative;
+}
+
+.recipeCarousel > .carouselItem.selectedItem .itemText {
+	margin-block: 0.5rem;
+
+	text-align: center;
+	font-weight: 600;
+}
+
+.recipeCarousel > .carouselItem > .itemImageWrapper > .itemImage {
+	position: relative;
+	max-height: 9.5rem;
+	overflow: hidden;
+}
+
+.recipeCarousel > .carouselItem > .itemImageWrapper > .itemImage > img {
+	height: auto;
+	width: 100%;
+	max-height: 9.5rem;
+
+	object-fit: cover;
+	transition: transform 350ms;
+}
+
+.recipeCarousel > .carouselItem > .itemImageWrapper > .itemImage > img:hover,
+.recipeCarousel > .carouselItem.selectedItem > .itemImageWrapper > .itemImage > img {
+	transform: scale(1.08);
+}
+
+.recipeCarousel > .carouselItem > .itemImageWrapper > .itemImage > .imageMask {
+	height: 100%;
+	width: 100%;
+	background-color: unset;
+	transition: background-color var(--item-mask);
+}
+
+.recipeCarousel > .carouselItem.selectedItem:hover > .itemImageWrapper > .itemImage > .imageMask {
+	background-color: var(--ebony-50);
+}
+
+.recipeCarousel > .carouselItem .imageMask > .maskIcon {
+	height: 50%;
+	width: 50%;
+
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+	opacity: 0;
+	transition: opacity var(--item-mask);
+}
+
+.recipeCarousel > .carouselItem.selectedItem:hover .imageMask > .maskIcon {
+	opacity: 0.8;
+}
+
+@media screen and (min-width: 1440px) {
+	.navContainer {
+		width: clamp(50px, 20%, 100px);
+	}
+
+	.navItem {
+		padding-block: 2rem;
+	}
+
+	.navSelectionIndicator {
+		height: calc(30px + 1.5rem);
+		transform: translateY(calc(94px + 1.5rem));
+	}
+
+	.mainContainer {
+		height: clamp(500px, 65%, 1000px);
+	}
+
+	.heroTextContainer {
+		padding: 4rem 0 4rem;
+	}
+
+	.recipeCarouselContainer {
+		padding-inline: 2rem;
+	}
+
+	.recipeCarousel > .carouselItem {
+		max-height: 15rem;
+	}
+
+	.recipeCarousel > .carouselItem > .itemImageWrapper > .itemImage,
+	.recipeCarousel > .carouselItem > .itemImageWrapper > .itemImage > img {
+		max-height: 12rem;
+	}
+}
+
+@media screen and (min-height: 1024px) {
+	.mainContainer {
+		height: clamp(500px, 70%, 1000px);
+	}
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Recipe Book</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/indexStyles.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fontStyles.css') }}" />
+</head>
+<body>
+	<div class="fullPageContainer">
+		<nav class="navContainer">
+			<ul class="navList">
+				{% for item in navItems %}
+				<li class="navItem">
+					<img class="itemImage" src="{{ url_for('static', filename='images/svg/' + item + '.svg')}}" alt="{{ item|capitalize }}" />
+				</li>
+				{% endfor %}
+				<div id="navSelectionIndicator" class="navSelectionIndicator"></div>
+			</ul>
+		</nav>
+		<div class="mainContainer">
+			<div class="heroContainer">
+				<div class="heroTextContainer fontWhite">
+					<div id="heroTextWrapper" class="heroTextWrapper">
+						<span class="heroTitle fontTitle">{{ recommendedRecipes[0].title }}</span>
+						<span class="heroSubtitle fontSubtitle">Recipe of the day</span>
+						<span class="heroDescription fontDescription fontGrey">{{ recommendedRecipes[0].summary }}</span>
+					</div>
+				</div>
+				<div id="heroImage" class="heroImage" style="background-image: url('{{ recommendedRecipes[0].image }}')"></div>
+				<div class="imageMask"></div>
+				<div class="imageBottomFade"></div>
+			</div>
+			<div class="recipeCarouselContainer">
+				<div class="carouselCategory">
+					<span class="fontCategory fontWhite"> Recommended Recipes</span>
+				</div>
+				<ul class="recipeCarousel">
+					{% for recipe in recommendedRecipes %}
+					<li class="carouselItem" data-title="{{ recipe.title }}" data-image="{{ recipe.image }}" data-description="{{ recipe.summary }}">
+						<a href="{{ recipe.spoonacularSourceUrl }}" class="itemImageWrapper">
+							<div class="itemImage">
+								<img src="{{ recipe.image }}" alt="{{ recipe.name }}" />
+								<div class="imageMask">
+									<img class="maskIcon" src="{{ url_for('static', filename='images/svg/arrow_filled_circle.svg')}}" alt="Check Recipe" />
+								</div>
+							</div>
+						</a>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<script src="../static/js/carouselScript.js"></script>
+	<script src="../static/js/navbarScript.js"></script>
+</body>
