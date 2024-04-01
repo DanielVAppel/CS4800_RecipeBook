@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <title>Recipe Cookbook Test</title>
+        <script src="backend/fireAuth.js" defer type = "module"></script>
     </head>
     <body>
         <h1>Recipe Cookbook Test</h1>
@@ -10,6 +11,12 @@
             <input type="submit" value="Search">
             <a href="/home" class="home-button">Home</a>
         </form>
+
+
+        <button id="google-login-btn" class="google-button">
+            <i class="fab fa-google"></i> Login with Google
+        </button>
+
 
         {% if recipes%}
         <h2>Results for "{{ recipe_query }}"</h2>
