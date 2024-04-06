@@ -1,40 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Recipe Cookbook Test</title>
-        <script src="backend/fireAuth.js" defer type = "module"></script>
-    </head>
-    <body>
-        
-        <h1 id="welcome-message">Recipe Cookbook Test</h1>
-        <h1></h1>
-        <form action="/" method="POST">
-            <input type="text" name="recipe_query" id="recipe_query">
-            <input type="submit" value="Search">
-            <a href="/home" class="home-button">Home</a>
-        </form>
+<head>
+    <script src="backend/fireAuth.js" defer type = "module"></script>
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Search</title>
+    <link rel="stylesheet" type="text/css" href="backend/styles.css">
+</head>
+<body>
+    <button id="google-login-btn" class="google-button">
+        <i class="fab fa-google"></i> Login with Google
+    </button>
+<div class="container">
+    <h1>Recipe Search</h1>
+    <!-- Recipe Search Section -->
+    <input type="text" id="searchInput" placeholder="Enter an ingredient or dish...">
+    <button onclick="searchRecipes()">Search</button>
+    <ul id="recipeList"></ul>
+</div>
 
-        <button id="google-login-btn" class="google-button">
-            <i class="fab fa-google"></i> Login with Google
-        </button>
+<script src="backend/scripts.js"></script>
 
-
-        {% if recipes%}
-        <h2>Results for "{{ recipe_query }}"</h2>
-        <ul>
-            {% for recipe in recipes %}
-            <li>
-                <h3 class="recipe-title">{{ recipe.title }}</h3>
-                {% if recipe.image %}
-                <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
-                {% endif %}
-                <a href="{{ url_for('view_recipe', recipe_id=recipe.id, recipe_query=recipe_query) }}">View</a>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>No recipes found</p>
-        {% endif %}
-    </body>
+</body>
 </html>
