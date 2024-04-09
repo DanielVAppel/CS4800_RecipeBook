@@ -1,26 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="backend/fireAuth.js" defer type = "module"></script>
+    <script src="backend/fireAuth.js" defer type="module"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipe Search</title>
-    <link rel="stylesheet" type="text/css" href="backend/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
+
+    <div class="hero"> 
+        <nav>
+            <img src="images/360_F_441732816_Eo3fHdX3oImKtXdkYkktCrR1mbwAT9I6.jpg" class="logo">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Features</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <img src="images/FIX06w.webp" class="user-pic" onclick="toggleMenu()">
+
+            <div class="sub-menu-wrap" id="subMenu">
+                <div class="sub-menu">
+                    <div class="user-info">
+                        <img src="images/FIX06w.webp">
+                        <h2>Placeholder(Name)</h2>
+                    </div>
+                </div>
+                <hr>
+                <a href="#" class="sub-menu-link">
+                    <img src="images/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.webp">
+                    <p>Edit Profile</p>
+                    <span>></span>
+                </a>
+                <a href="#" class="sub-menu-link">
+                    <img src="images/settings-icon.png">
+                    <p>Settings</p>
+                    <span>></span>
+                </a>
+                <a href="#" class="sub-menu-link">
+                    <img src="images/018_128_arrow_exit_logout-512.webp">
+                    <p>Log Out</p>
+                    <span>></span>
+                </a>
+            </div>
+        </nav>
+
+        <div class="container">
+            <h1>Recipe Search</h1>
+            <!-- Recipe Search Section -->
+            <input type="text" id="searchInput" placeholder="Enter an ingredient or dish...">
+            <button onclick="searchRecipes()">Search</button>
+            <ul id="recipeList"></ul>
+        </div>
+    </div>
+
     <button id="google-login-btn" class="google-button">
         <i class="fab fa-google"></i> Login with Google
     </button>
-<div class="container">
-    <h1>Recipe Search</h1>
-    <!-- Recipe Search Section -->
-    <input type="text" id="searchInput" placeholder="Enter an ingredient or dish...">
-    <button onclick="searchRecipes()">Search</button>
-    <ul id="recipeList"></ul>
-</div>
 
-<script src="backend/scripts.js"></script>
+    <script src="backend/scripts.js"></script>
+    <script>
+        let subMenu = document.getElementById("subMenu");
 
+        function toggleMenu() {
+            subMenu.classList.toggle("open-menu")
+        }
+    </script>
 </body>
 </html>
