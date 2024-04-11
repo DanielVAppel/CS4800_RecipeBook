@@ -6,7 +6,7 @@ from urllib.parse import unquote
 
 app = Flask(__name__)
 
-API_KEY = 'INSERT API KEY'
+API_KEY = 'cd18acd25a7541a5b2dcf54105ea7828'
 
 #Define route for "Home button"
 @app.route("/home", methods=['GET'])

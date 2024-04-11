@@ -12,13 +12,22 @@ app = Flask(__name__)
 @app.route("/")
 def home_page():
     # navigation tab
-    navItems = ["search", "home", "create"]
+    navItems = ["search", "home", "create", "user"]
 
     # recommended dishes/recipes
     recommendedRecipes = generate_random_recipes()
 
     return render_template("index.html", navItems=navItems, recommendedRecipes=recommendedRecipes)
 
+@app.route("/favorites")
+def favorites_page():
+    # navigation tab
+    navItems = ["search", "home", "create", "user"]
+
+    # recommended dishes/recipes
+    favoriteRecipes = generate_random_recipes()
+
+    return render_template("favorites.html", navItems=navItems, favoriteRecipes=favoriteRecipes)
 
 # generate home page "Recipe of the Day / Recommended Recipes"
 def generate_random_recipes():
