@@ -4,6 +4,8 @@
 	--ebony: rgb(23, 23, 23);
 	--ebony-50: rgba(23, 23, 23, 0.5);
 
+	--white-10: rgba(255, 255, 255, 0.1);
+
 	--alto: rgb(215, 215, 215);
 	--alto-80: rgba(215, 215, 215, 0.8);
 	--alto-50: rgba(215, 215, 215, 0.5);
@@ -43,7 +45,7 @@ ul {
 	height: 100vh;
 
 	display: flex;
-	background-color: var(--mineshaft);
+	background-color: var(--eerie-black);
 }
 
 .navContainer {
@@ -91,7 +93,9 @@ ul {
 	background-color: var(--alto-10);
 }
 
-.navItem > .itemImage {
+.navItem > .itemImage,
+.searchBarContainer > .itemImageWrapper > .itemImage,
+.searchResultContainer > .resultList > .resultItem > .itemTextWrapper > .itemDetailsContainer > .itemNameContainer > .itemFavoriteWrapper {
 	height: 30px;
 	width: 30px;
 }
@@ -111,8 +115,13 @@ ul {
 }
 
 .mainContainer {
-	height: clamp(500px, 65%, 800px);
+	height: clamp(500px, 100%, 100vh);
 	width: 100%;
+
+	display: grid;
+	grid-template-rows: 2fr 1fr;
+
+	transition: opacity var(--hero-fade) var(--cbz);
 }
 
 .heroContainer {
@@ -121,6 +130,8 @@ ul {
 
 	display: grid;
 	grid-template-columns: 2fr 1fr;
+
+	transition: opacity var(--hero-fade) var(--cbz);
 }
 
 .heroTextContainer {
@@ -142,7 +153,8 @@ ul {
 	margin-bottom: 0.25rem;
 }
 
-.heroSubsection {
+.heroSubsection,
+.itemDetailsContainer > .itemDetails {
 	display: flex;
 	flex-direction: row;
 	gap: 1rem;
@@ -163,14 +175,17 @@ ul {
 	margin-bottom: 0.75rem;
 }
 
-.heroDescription {
-	width: 70%;
-
+.heroDescription,
+.itemDescription {
 	display: -webkit-box;
 	-webkit-line-clamp: 4;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.heroDescription {
+	width: 70%;
 }
 
 .heroImage {
@@ -212,6 +227,7 @@ ul {
 }
 
 .recipeCarouselContainer {
+	height: 100%;
 	width: 100%;
 	padding-inline: 0.75rem;
 	overflow-x: auto;
@@ -220,6 +236,14 @@ ul {
 	user-select: none;
 	-ms-overflow-style: none;
 	scrollbar-width: none;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+
+	background-color: var(--mineshaft);
+
+	transition: opacity var(--hero-fade) var(--cbz);
 }
 
 .carouselCategory {
@@ -342,6 +366,191 @@ ul {
 	opacity: 0.8;
 }
 
+.recipeSearchContainer {
+	height: clamp(500px, 100%, 100vh);
+	/* max-width: 900px; */
+
+	background-color: var(--eerie-black);
+	display: flex;
+	flex-direction: column;
+	/* gap: 1rem; */
+	margin-inline: auto;
+
+	visibility: visible;
+	opacity: 1;
+	transition: opacity var(--hero-fade) var(--cbz);
+}
+
+.recipeSearchContainer > :is(.searchBarContainer, .searchResultContainer) {
+	display: flex;
+	padding: 1rem;
+}
+
+.recipeSearchContainer > .searchBarContainer {
+	position: relative;
+
+	height: clamp(50px, 10vh, 15rem);
+}
+
+.searchBarContainer > input.recipeSearch {
+	height: 100%;
+	width: 500px;
+
+	padding-block: 1rem;
+	padding-inline: 2rem;
+	background-color: inherit;
+
+	border: none;
+	border: 1px solid var(--silver-chalice-20);
+	border-radius: 40px 0 0 40px;
+	outline: none;
+
+	transition: border-color var(--input-focus) var(--cbz);
+}
+
+.searchBarContainer > input.recipeSearch:focus {
+	border-color: #3ea6ff;
+}
+
+.searchBarContainer > .itemImageWrapper {
+	height: 100%;
+	/* 1rem + 0.5rem (itemImage offset modifier) */
+	width: calc(50px + 1.5rem);
+
+	display: flex;
+	flex-direction: row;
+	/* justify-content: center; */
+	align-items: center;
+
+	background-color: var(--ebony);
+	border: 1px solid var(--silver-chalice-20);
+	border-left: 0;
+	border-radius: 0 40px 40px 0;
+	padding-inline: 1rem;
+
+	transition: background-color var(--input-focus) var(--cbz);
+}
+
+.searchBarContainer > .itemImageWrapper:hover {
+	background-color: var(--white-10);
+}
+
+.searchBarContainer > .itemImageWrapper > .itemImage {
+	/* 0.5rem (itemImage offset modifier) / 2 */
+	margin-left: 0.25rem;
+	opacity: 0.8;
+}
+
+.recipeSearchContainer > .searchResultContainer {
+	height: 100%;
+
+	scrollbar-width: none;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	padding-block: 0 !important;
+}
+
+.searchResultContainer > .resultList {
+	height: 100%;
+	width: 100%;
+
+	display: flex;
+	flex-direction: column;
+}
+
+.searchResultContainer > .resultList > .resultItem {
+	display: flex;
+	flex-direction: row;
+	/* padding: 2rem; */
+}
+
+.searchResultContainer > .resultList > .resultItem {
+	margin-top: 2rem;
+	padding-bottom: 2rem;
+}
+
+.searchResultContainer > .resultList > .resultItem:not(:last-child) {
+	border-bottom: 1px solid var(--alto-30);
+}
+
+.searchResultContainer > .resultList > .resultItem > .itemImageWrapper {
+	position: relative;
+	/* 360 420 500*/
+	max-width: 360px;
+	min-width: 240px;
+
+	flex: 1;
+	flex-basis: 0.000000001px;
+	display: block;
+
+	margin-right: 16px;
+}
+
+.searchResultContainer > .resultList > .resultItem > .itemImageWrapper::before {
+	content: "";
+	display: block;
+	padding-top: 56.11%;
+}
+
+.searchResultContainer > .resultList > .resultItem > .itemImageWrapper > .itemImage {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+
+	height: 100%;
+	margin-left: auto;
+	margin-right: auto;
+
+	display: block;
+	overflow: hidden;
+	border-radius: 12px;
+}
+
+.searchResultContainer > .resultList > .resultItem > .itemImageWrapper > .itemImage > img {
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+	display: inline-block;
+}
+
+.searchResultContainer > .resultList > .resultItem > .itemTextWrapper {
+	/* width: clamp(400px, 30%, 600px); */
+	width: 60%;
+	max-width: 800px;
+}
+
+.searchResultContainer > .resultList > .resultItem > .itemTextWrapper > .itemDetailsContainer {
+	height: 100%;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
+	gap: 0.5rem;
+}
+
+.searchResultContainer > .resultList > .resultItem > .itemTextWrapper > .itemDetailsContainer span {
+	-webkit-line-clamp: 2;
+}
+
+.searchResultContainer > .resultList > .resultItem > .itemTextWrapper > .itemDetailsContainer > .itemNameContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.searchResultContainer > .resultList > .resultItem > .itemTextWrapper > .itemDetailsContainer > .itemNameContainer > .itemFavoriteWrapper > .itemFavorite {
+	visibility: hidden;
+	opacity: 0;
+	transition: all var(--input-focus) var(--cbz);
+}
+
+.searchResultContainer > .resultList > .resultItem > .itemTextWrapper > .itemDetailsContainer:hover > .itemNameContainer > .itemFavoriteWrapper > .itemFavorite {
+	visibility: visible;
+	opacity: 1;
+}
+
 @media screen and (min-width: 1440px) {
 	.navContainer {
 		width: clamp(50px, 20%, 100px);
@@ -356,14 +565,11 @@ ul {
 		transform: translateY(calc(94px + 1.5rem));
 	}
 
-	.mainContainer {
-		height: clamp(500px, 65%, 1000px);
-	}
-
 	.heroContainer {
+		/* height: clamp(500px, 65%, 1000px); */
 		grid-template-columns: 1fr 1fr;
 	}
-	
+
 	.heroTextContainer {
 		width: clamp(200px, 60%, 800px);
 		padding: 4rem 0 4rem;
@@ -372,7 +578,7 @@ ul {
 	.heroTitle {
 		margin-bottom: 0.5rem;
 	}
-	
+
 	.heroSubtitle {
 		margin-bottom: 1.25rem;
 	}
@@ -389,10 +595,42 @@ ul {
 	.recipeCarousel > .carouselItem > .itemImageWrapper > .itemImage > img {
 		max-height: 12rem;
 	}
+
+	.recipeSearchContainer > .searchBarContainer {
+		height: clamp(50px, 12.5vh, 15rem);
+	}
+
+	.recipeSearchContainer > :is(.searchBarContainer, .searchResultContainer) {
+		padding: 2rem;
+	}
+
+	.recipeSearchContainer > .searchResultContainer > .resultList > .resultItem:first-child {
+		/* padding-top: 0; */
+	}
+
+	.searchResultContainer > .resultList > .resultItem > .itemImageWrapper {
+		max-width: 420px;
+	}
 }
 
 @media screen and (min-height: 1024px) {
 	.mainContainer {
-		height: clamp(500px, 70%, 1000px);
+		height: clamp(500px, 100%, 100vh);
+	}
+
+	.heroContainer {
+		/* height: clamp(500px, 70%, 1000px); */
+	}
+
+	.recipeSearchContainer > .searchBarContainer {
+		height: clamp(50px, 10vh, 15rem);
+	}
+
+	.searchResultContainer > .resultList > .resultItem > .itemImageWrapper {
+		/* max-width: 500px; */
+	}
+
+	.searchResultContainer > .resultList > .resultItem > .itemTextWrapper {
+		max-width: 1000px;
 	}
 }
