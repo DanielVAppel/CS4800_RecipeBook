@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Recipe Book</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/indexStyles.css') }}" />
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fontStyles.css') }}" />
+	</head>
+	<body>
+		<div class="fullPageContainer">
+			<nav class="navContainer" data-activeindex="{{ navIndex }}">
+				<ul class="navList">
+					{% for item in navItems %}
+					<li class="navItem" data-tab="{{ item }}">
+						<img class="itemImage" src="{{ url_for('static', filename='images/svg/' + item + '.svg')}}" alt="{{ item|capitalize }}" />
+					</li>
+					{% endfor %}
+					<div id="navSelectionIndicator" class="navSelectionIndicator"></div>
+				</ul>
+			</nav>
+            <div class="mainContainer">
+                {% block content %}
+                {% endblock %}
+            </div>
+		</div>
+
+        <script src="../static/js/helperScript.js"></script>
+        <script src="../static/js/carouselScript.js"></script>
+        <script src="../static/js/navbarScript.js"></script>
+        <script src="../static/js/recipeSearchScript.js"></script>
+	</body>
+</html>

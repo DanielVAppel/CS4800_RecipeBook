@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="heroContainer">
+	<div class="heroTextContainer fontWhite">
+		<div id="heroTextWrapper" class="heroTextWrapper">
+			<span class="heroTitle fontTitle">{{ recommendedRecipes[0].title }}</span>
+			<div class="heroSubsection fontGrey">
+				<span class="fontSubtitle">{{ recommendedRecipes[0].servings }} Servings</span>
+				<div class="hollowBox">
+					<span class="fontSubtitle">Ready in {{ recommendedRecipes[0].readyInMinutes }}M</span>
+				</div>
+			</div>
+			<div class="heroSubtitle">
+				<span class="fontSubtitle">Recipe of the day</span>
+			</div>
+			<span class="heroDescription fontDescription fontGrey">{{ recommendedRecipes[0].summary }}</span>
+		</div>
+	</div>
+	<div id="heroImage" class="heroImage" style="background-image: url('{{ recommendedRecipes[0].image }}')"></div>
+	<div class="imageMask"></div>
+	<div class="imageBottomFade"></div>
+</div>
+<div class="recipeCarouselContainer">
+	<div class="carouselCategory">
+		<span class="fontCategory fontWhite"> Recommended Recipes</span>
+	</div>
+	<ul class="recipeCarousel">
+		{% for recipe in recommendedRecipes %}
+		<li
+			class="carouselItem"
+			data-id="{{ recipe.id }}"
+			data-title="{{ recipe.title }}"
+			data-image="{{ recipe.image }}"
+			data-servings="{{ recipe.servings }}"
+			data-cookingtime="{{ recipe.readyInMinutes }}"
+			data-description="{{ recipe.summary }}"
+			data-source="{{ recipe.spoonacularSourceUrl }}"
+			data-cuisines=" {{ recipe.cuisines }}"
+		>
+			<a href="{{ recipe.spoonacularSourceUrl }}" class="itemImageWrapper">
+				<div class="itemImage">
+					<img src="{{ recipe.image }}" alt="{{ recipe.name }}" />
+					<div class="imageMask">
+						<img class="maskIcon" src="{{ url_for('static', filename='images/svg/arrow_filled_circle.svg')}}" alt="Check Recipe" />
+					</div>
+				</div>
+			</a>
+		</li>
+		{% endfor %}
+	</ul>
+</div>
+{% endblock %}
