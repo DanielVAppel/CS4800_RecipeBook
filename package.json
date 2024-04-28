@@ -1,5 +1,6 @@
 {
   "dependencies": {
+<<<<<<< HEAD
     "firebase": "^10.8.1"
   },
   "name": "recipe",
@@ -13,4 +14,9 @@
   "author": "",
   "license": "ISC",
   "description": ""
+=======
+    "firebase": "^10.10.0",
+    "firebase-admin": "^12.1.0"
+  }
+>>>>>>> alen
 }
