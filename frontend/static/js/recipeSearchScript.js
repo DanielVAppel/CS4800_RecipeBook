@@ -77,16 +77,22 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 	const attachSearchRecipeEventListener = () => {
-		const recipeSearchInput = document.getElementById("recipeSearch");
+		const recipeSearchInput = document.getElementById("recipeSearch"),
+			recipeSearchButton = document.querySelector(".searchBarContainer > .itemImageWrapper");
+
+		const updateSearchConfig = () => {
+			searchConfig.hasChanged = true;
+			searchConfig.lastUpdateTimestamp = new Date().getTime();
+		};
+
+		// execute search query by clicking on search icon
+		recipeSearchButton.addEventListener("click", updateSearchConfig);
 
 		// can execute search query by pressing enter
 		// NOTE: search is automatically executed every 600ms if
 		//       any change has been made to input box
 		recipeSearchInput.addEventListener("keydown", function (event) {
-			if (event.key == "Enter") {
-				searchConfig.hasChanged = true;
-				searchConfig.lastUpdateTimestamp = new Date().getTime();
-			}
+			if (event.key == "Enter") updateSearchConfig();
 		});
 
 		// prepare search query to automatically be updated
@@ -100,8 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				addClass(recipeSearchInput, "fontGrey");
 			}
 
-			searchConfig.hasChanged = true;
-			searchConfig.lastUpdateTimestamp = new Date().getTime();
+			updateSearchConfig();
 		});
 
 		// handles the update feature based on event listeners

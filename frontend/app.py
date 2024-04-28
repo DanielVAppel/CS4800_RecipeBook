@@ -100,7 +100,7 @@ def generate_random_recipes():
         return data['recipes']
     else:
         raise RuntimeError(response.content)
-
+    
 
 def search_recipe_by_query(query, limit=5):
     # /search returns { id, title, image (unusable), servings, RIM, sourceUrl }
@@ -124,7 +124,7 @@ def search_recipe_by_query(query, limit=5):
     return []
 
 
-def search_recipe_by_id(id):
+def search_recipe_by_id(id): 
     url = f'https://api.spoonacular.com/recipes/{id}/information'
     params = {
         'apiKey': os.getenv("SPOONACULAR_API_KEY")
