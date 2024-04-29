@@ -29,6 +29,9 @@ def home_page():
 def search_page():
     return render_template("search.html", navItems=navItems, resultItems=[])
 
+@app.route("/create")
+def create_page():
+    return render_template("create.html", navItems=navItems)
 
 @app.route("/favorites")
 def favorites_page():

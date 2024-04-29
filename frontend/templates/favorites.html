@@ -1,56 +1,38 @@
-<!DOCTYPE html>
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Recipe Book</title>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/favoriteStyles.css') }}" />
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fontStyles.css') }}" />
-</head>
-<body>
-	<div class="fullPageContainer">
-		<nav class="navContainer">
-			<ul class="navList">
-				{% for item in navItems %}
-				<li class="navItem">
-					<img class="itemImage" src="{{ url_for('static', filename='images/svg/' + item + '.svg')}}" alt="{{ item|capitalize }}" />
-				</li>
-				{% endfor %}
-				<div id="navSelectionIndicator" class="navSelectionIndicator"></div>
-			</ul>
-		</nav>
-		<div class="mainContainer">
-			<div class="recipeCarouselContainer">
-				<div class="carouselCategory">
-					<span class="fontCategory fontWhite"> Favorite Recipes</span>
-				</div>
-				<ul class="recipeCarousel">
-					{% for recipe in favoriteRecipes %}
-					<li
-						class="carouselItem"
-						data-id="{{ recipe.id }}"
-						data-title="{{ recipe.title }}"
-						data-image="{{ recipe.image }}"
-						data-servings="{{ recipe.servings }}"
-						data-cookingtime="{{ recipe.readyInMinutes }}"
-						data-description="{{ recipe.summary }}"
-						data-source="{{ recipe.spoonacularSourceUrl }}"
-						data-cuisines=" {{ recipe.cuisines }}"
-					>
-						<a href="{{ recipe.spoonacularSourceUrl }}" class="itemImageWrapper">
-							<div class="itemImage">
-								<img src="{{ recipe.image }}" alt="{{ recipe.name }}" />
-								<div class="imageMask">
-									<img class="maskIcon" src="{{ url_for('static', filename='images/svg/arrow_filled_circle.svg')}}" alt="Check Recipe" />
-								</div>
-							</div>
-						</a>
-					</li>
-					{% endfor %}
-				</ul>
-			</div>
-		</div>
-	</div>
+{% extends "base.html" %}
 
-	<script src="../static/js/carouselScript.js"></script>
-	<script src="../static/js/navbarScript.js"></script>
-</body>
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/favoriteStyles.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fontStyles.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="recipeCarouselContainer">
+	<div class="carouselCategory">
+		<span class="fontCategory fontWhite"> Favorite Recipes</span>
+	</div>
+	<ul class="recipeCarousel">
+		{% for recipe in favoriteRecipes %}
+		<li
+			class="carouselItem"
+			data-id="{{ recipe.id }}"
+			data-title="{{ recipe.title }}"
+			data-image="{{ recipe.image }}"
+			data-servings="{{ recipe.servings }}"
+			data-cookingtime="{{ recipe.readyInMinutes }}"
+			data-description="{{ recipe.summary }}"
+			data-source="{{ recipe.spoonacularSourceUrl }}"
+			data-cuisines=" {{ recipe.cuisines }}"
+		>
+			<a href="{{ recipe.spoonacularSourceUrl }}" class="itemImageWrapper">
+				<div class="itemImage">
+					<img src="{{ recipe.image }}" alt="{{ recipe.name }}" />
+					<div class="imageMask">
+						<img class="maskIcon" src="{{ url_for('static', filename='images/svg/arrow_filled_circle.svg')}}" alt="Check Recipe" />
+					</div>
+				</div>
+			</a>
+		</li>
+		{% endfor %}
+	</ul>
+</div>
+{% endblock %}
