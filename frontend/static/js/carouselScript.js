@@ -1,30 +1,23 @@
 // Handles carousel related events
-
-// helper function
-const calcElapsedTime = (start, end) => end - start;
-
-// handle user scrolling in recommended recipes
 const carouselConfig = {
-	timing: {
+	timing: {						// transition timings
 		itemFocus: 350,
 		focusMaskDelay: 100,
 		heroDelay: 50,
 	},
-	scrollSpeed: 750,
-	minimumTimeBetweenScrolls: 600,
+	scrollSpeed: 750, 				// horizontal distance scroll of mouse
+	minimumTimeBetweenScrolls: 600, // delay between scrolls for smooth transition
 	lastScrollTimestamp: new Date().getTime(),
 };
 
-// creates the "Check Recipe" text underneath selected recommended recipe
+// creates the "Check Recipe" element underneath selected recommended recipe
 const createItemText = (focusedItem) => {
-	const itemText = document.createElement("div");
-	itemText.classList.add("itemText");
+	const itemText = createElWithClass("div", "itemText");
 
-	const anchor = document.createElement("a");
+	const anchor = createElWithClass("a");
 	anchor.href = focusedItem.dataset.source;
 
-	const span = document.createElement("span");
-	span.classList.add("fontSubtitle");
+	const span = createElWithClass("span", "fontSubtitle");
 	span.textContent = "Check Recipe";
 
 	anchor.appendChild(span);
@@ -33,8 +26,8 @@ const createItemText = (focusedItem) => {
 	return itemText;
 };
 
+// convert minutes into hh:mm format
 const reduceMinutes = (minutes) => {
-	console.log(minutes);
 	if (minutes < 60) {
 		return `${minutes} min`;
 	} else {
@@ -50,9 +43,7 @@ const reduceMinutes = (minutes) => {
 };
 
 document.addEventListener("DOMContentLoaded", function () {
-	// handle user selection in recommended recipes
-	const root = document.documentElement,
-		carouselItems = document.querySelectorAll(".carouselItem"),
+	var carouselItems = document.querySelectorAll(".carouselItem"),
 		heroImage = document.getElementById("heroImage"),
 		heroTextWrapper = document.getElementById("heroTextWrapper"),
 		heroTitle = document.querySelector(".heroTitle"),
@@ -62,47 +53,76 @@ document.addEventListener("DOMContentLoaded", function () {
 		heroSubtitle = document.querySelector(".heroSubtitle > .fontSubtitle"),
 		heroDescription = document.querySelector(".heroDescription");
 
+	const root = document.documentElement;
+
 	const {
 		timing: { itemFocus, focusMaskDelay, heroDelay },
 		scrollSpeed,
 	} = carouselConfig;
 
-	// set dynamic properties
+	// set dynamic properties (transition timings)
 	root.style.setProperty("--item-focus", `${itemFocus}ms`);
 	root.style.setProperty("--item-mask", `${itemFocus + focusMaskDelay}ms`);
 	root.style.setProperty("--hero-fade", `${itemFocus + heroDelay}ms`);
 
 	// create event listeners for each carousel item
-	for (let i = 0; i < carouselItems.length; i++) {
-		const item = carouselItems[i];
+	const attachCarouselEventListeners = () => {
+		// re-initialize variables that were previously removed
+		carouselItems = document.querySelectorAll(".carouselItem");
+		heroImage = document.getElementById("heroImage");
+		heroTextWrapper = document.getElementById("heroTextWrapper");
+		heroTitle = document.querySelector(".heroTitle");
+		subsectionServings = document.querySelector(".heroSubsection > .fontSubtitle");
+		// ready in minutes (RIM)
+		subsectionRIM = document.querySelector(".heroSubsection > .hollowBox > .fontSubtitle");
+		heroSubtitle = document.querySelector(".heroSubtitle > .fontSubtitle");
+		heroDescription = document.querySelector(".heroDescription");
 
-		// remember most recently selected recipe
-		item.addEventListener("click", function (event) {
-			event.stopPropagation();
+		for (let i = 0; i < carouselItems.length; i++) {
+			const item = carouselItems[i];
 
-			const selectedItem = event.target.closest(".selectedItem");
-			// if recipe is not "selected", reject href default behavior
-			if (!selectedItem) event.preventDefault();
-			// otherwise, it will be "selected" and href will be accessable
-			if (selectedItem != this) focusItem(item, i == 0);
-		});
-	}
+			/**
+			 * First click on the recipe in the carousel should bring it to focus,
+			 * changing the hero background image and text (big image and text on home page)
+			 * The second click then redirects user to the actual recipe page.
+			 */
+			item.addEventListener("click", function (event) {
+				event.stopPropagation();
 
+				const selectedItem = event.target.closest(".selectedItem");
+
+				// if recipe is not "selected", reject href default behavior
+				if (!selectedItem) event.preventDefault();
+				// otherwise, it will be "selected" and href will be accessable
+				if (selectedItem != this) focusItem(item, i == 0);
+			});
+		}
+	};
+
+	// handles user's first click on recipe in carousel
 	const focusItem = (focusedItem, recipeOfTheDay) => {
-		// remove all recipes that are "selected"
+		// ensures only one carousel recipe is selected at a time
 		carouselItems.forEach((item) => {
-			item.classList.remove("selectedItem");
+			removeClass(item, "selectedItem");
 			const itemText = item.querySelector(".itemText");
 			if (itemText) item.removeChild(itemText);
 		});
 
 		const itemText = createItemText(focusedItem);
 
-		// "select" the recipe
-		focusedItem.classList.add("selectedItem");
+		addClass(focusedItem, "selectedItem");
+		// adds the "Check Recipe" element to selected recipe
 		focusedItem.appendChild(itemText);
 
-		// "selection" transition
+		/**
+		 * This part is the transition handler between carousel recipe selections.
+		 *
+		 * Timings:
+		 * hero elements have opacity transition times of 400ms (itemFocus + heroDelay)
+		 *
+		 * To avoid abrupt changes to text, we "hide" the hero element and then make the appropriate
+		 * changes. Then, we "show" the updated hero element based on the selected recipe.
+		 */
 		heroTextWrapper.style.opacity = 0;
 		heroImage.style.opacity = 0;
 
@@ -120,6 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			heroDescription.textContent = description;
 		}, itemFocus + heroDelay);
 
+		// nicer transition when text loads in delayed
 		setTimeout(() => {
 			heroTextWrapper.style.opacity = 1;
 		}, itemFocus + heroDelay * 5);
@@ -140,7 +161,17 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	});
 
+	const handleHashChange = () => {
+		const { hash } = window.location;
+
+		if (hash.includes("home")) attachCarouselEventListeners();
+	};
+
+	window.addEventListener("hashchange", handleHashChange);
+
+	// initial call to set up home page
 	(initScript = () => {
-		focusItem(carouselItems[0], true); // initial call to set selectedItem
+		focusItem(carouselItems[0], true);
+		attachCarouselEventListeners();
 	})();
 });

@@ -27,8 +27,19 @@
 }
 
 .heroSubsection .fontSubtitle,
+.resultItem .fontSubtitle,
 .fontDescription {
+    font-size: 14px;
+}
+
+:is(.searchBarContainer, .itemDetailsContainer) .fontTitle {
     font-size: 16px;
+    line-height: normal;
+    text-transform: none;
+}
+
+.itemDetailsContainer .fontTitle {
+    font-size: 18px;
 }
 
 .fontWhite {
@@ -41,7 +52,11 @@
 
 @media screen and (min-width: 1440px) {
     .fontTitle {
-        font-size: 50px;
+        font-size: 36px;
+    }
+
+    .itemDetailsContainer .fontTitle {
+        font-size: 20px;
     }
 
     .fontSubtitle {

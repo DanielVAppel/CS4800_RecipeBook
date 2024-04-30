@@ -1,0 +1,47 @@
+{% extends "base.html" %} {% block content %}
+<div class="recipeSearchContainer fontGrey">
+	<div class="searchBarContainer">
+		<input type="text" id="recipeSearch" class="recipeSearch fontGrey fontTitle" placeholder="Search Recipe" autocomplete="off" spellcheck="false" />
+		<div class="itemImageWrapper">
+			<img class="itemImage" src="{{ url_for('static', filename='images/svg/search.svg')}}" alt="{{ item|capitalize }}" />
+		</div>
+	</div>
+	<div class="searchResultContainer">
+		<ul class="resultList">
+			{% for item in resultItems %}
+			<li
+				class="resultItem"
+                data-id="{{ item.id }}"
+                data-title="{{ item.title }}"
+				data-cookingtime="{{ item.readyInMinutes }}"
+			>
+				<a href="{{ item.spoonacularSourceUrl }}" class="itemImageWrapper">
+					<div class="itemImage">
+						<img src="{{ item.image }}" alt="{{ item.title }}" />
+					</div>
+				</a>
+				<div class="itemTextWrapper">
+					<div class="itemDetailsContainer">
+						<div class="itemNameContainer">
+							<a href="{{ item.spoonacularSourceUrl }}" class="itemNameWrapper">
+								<span class="fontTitle fontWhite">{{ item.title }}</span>
+							</a>
+							<div class="itemFavoriteWrapper">
+								<img class="itemFavorite" src="{{ url_for('static', filename='images/svg/star.svg') }}" alt="Favorite Recipe" />
+							</div>
+						</div>
+						<div class="itemDetails">
+							<span class="fontSubtitle fontGrey">{{ item.servings }} Servings</span>
+							<div class="hollowBox">
+								<span class="fontSubtitle fontGrey">Ready in {{ item.readyInMinutes }}</span>
+							</div>
+						</div>
+						<span class="itemDescription fontDescription fontGrey"> {{ item.summary }} </span>
+					</div>
+				</div>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+{% endblock %}
