@@ -13,10 +13,8 @@ const firebaseConfig = {
 };
 
 
-// Initialize Firebase
+// Initialize Firebase and get document reference
 const app = initializeApp(firebaseConfig);
-const authState =  JSON.parse(localStorage.getItem('authState'));
-console.log("AUTHSTATE:" + authState)
 const docRefId = localStorage.getItem('docRef')
 
 //Initialize fields
@@ -27,11 +25,12 @@ const initializeTextFields = (docRef) => {
   .then((docSnapshot) => {
     if(docSnapshot.exists()){
       const userData = docSnapshot.data();
+
       const nameInput = document.getElementById("nameInput")
       nameInput.value = userData.displayName;
 
       const buttonImage = document.getElementById("buttonImage")
-      console.log('setting button image')
+      console.log('Setting button image')
       buttonImage.src = userData.photo;
     }
   })
@@ -40,17 +39,23 @@ initializeTextFields(docRefId)
 
 const goBackBtn = document.getElementById("goBackBtn");
 goBackBtn.addEventListener("click", ()=> {
-    window.location.href = "create.html"
+    window.location.href = "login.html"
 })
+
+
 
 const enterDataBtn = document.getElementById("enterDataBtn")
 enterDataBtn.addEventListener("click", () => {
   const docRefId = localStorage.getItem('docRef')
   const db = getFirestore();
   const nameInput = document.getElementById('nameInput').value;
+  var fileElem = document.getElementById('myFile')
+  var fileInput = fileElem.files[0];
+  
   console.log(docRefId)
 
-  setDoc(doc(db, 'users', docRefId), {displayName: nameInput}, {merge: true})
+  
+  setDoc(doc(db, 'users', docRefId), {displayName: nameInput,}, {merge: true})
   .then(() => {
     console.log("Doc updated!")
   })
@@ -60,3 +65,4 @@ enterDataBtn.addEventListener("click", () => {
 
 
 })
+

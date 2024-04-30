@@ -43,12 +43,19 @@ const handleLoggedInState = (user) => {
     <h1>Welcome, ${user.displayName}</h1> 
     <button id="google-logout-btn" class="google-button">Logout</button>
     <button id="change-profile-btn">Change Profile</button> 
+    <button id="create-recipe-btn"> Create Recipe </button>
     `
     ;
   
     console.log("User is:" + user.displayName)
     console.log("User ID will be:" + user.uid)
     
+    const createRecipeBtn = document.getElementById("create-recipe-btn");
+    createRecipeBtn.addEventListener("click", () => {
+      localStorage.setItem('docRef', user.uid);
+      window.location.href = "createRecipe.html"
+    })
+
     //Functionality to edit profile, probably not necessary to be here but instead move functionality to profile tab
     const changeProfileBtn = document.getElementById("change-profile-btn");
     changeProfileBtn.addEventListener("click", () => {
@@ -70,6 +77,7 @@ const handleLoggedInState = (user) => {
           console.error('Logout Error:', error);
         });
     });
+
 };
 
 const handleLoggedOutState = () => {
@@ -78,20 +86,25 @@ const handleLoggedOutState = () => {
   const messageContainer = document.getElementById('logContainer');
   messageContainer.innerHTML = `
     <h1>Welcome</h1> 
-    <button id="google-login-btn" class="google-button"> <i class="fab fa-google"></i> Login with Google </button>
-  `;
+    <button id="google-login-btn" class="google-button"> <i class="fab fa-google"></i> Login with Google </button> 
+    
+  `
+  ;
 
   //Functionality to login
   const googleLoginBtn = document.getElementById("google-login-btn");
   googleLoginBtn.addEventListener("click", () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        const db = getFirestore();
+      
+        const user = result.user;
         console.log(`${user.displayName} has logged in`);
         console.log(result)
-        const user = result.user;
         
-
+        const db = getFirestore();
+        console.log(user);  //Print user data to console
+    
+        //checkFirstLog(user.uid);
         //Dataset to be added to Firebase
         const userData = {
           userUID: user.uid,
