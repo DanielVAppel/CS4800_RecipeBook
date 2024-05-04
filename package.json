@@ -1,22 +1,23 @@
 {
   "dependencies": {
-<<<<<<< HEAD
-    "firebase": "^10.8.1"
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "firebase": "^10.8.1",
+    "firebase-admin": "^12.1.0"
   },
   "name": "recipe",
   "version": "1.0.0",
   "main": "main.js",
-  "devDependencies": {},
   "scripts": {
+    "devStart": "nodemon backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
-=======
-    "firebase": "^10.10.0",
-    "firebase-admin": "^12.1.0"
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
->>>>>>> alen
 }
