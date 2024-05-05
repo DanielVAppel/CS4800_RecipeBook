@@ -33,7 +33,7 @@ def search_page():
 def create_page():
     return render_template("create.html", navItems=navItems)
 
-@app.route("/user")
+@app.route("/favorites")
 def favorites_page():
     # recommended dishes/recipes
     favoriteRecipes = generate_random_recipes()
@@ -141,5 +141,16 @@ def search_recipe_by_id(id):
     return None
         
     
+@app.route("/user")
+def user_page():
+    return render_template("login.html", navItems=navItems, userLoggedIn=False)
+
+@app.route("/loggedInUser", methods=["POST"])
+def userLoggedIn():
+  # you could add smth that will get the query for which html page to render
+  userInfo = request.json
+  if userInfo != None:
+    return render_template("favorites.html", navItems=navItems, userLoggedIn=True, user=request.json)
+
 if __name__ == "__main__":
     app.run(debug=True)
