@@ -1,16 +1,11 @@
 {% extends "base.html" %}
 
-{% block styles %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/favoriteStyles.css') }}" />
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fontStyles.css') }}" />
-{% endblock %}
-
 {% block content %}
 <div class="recipeCarouselContainer">
 	<div class="carouselCategory">
 		<span class="fontCategory fontWhite"> Favorite Recipes</span>
 	</div>
-	<ul class="recipeCarousel">
+	<ul class="recipeFavorites">
 		{% for recipe in favoriteRecipes %}
 		<li
 			class="carouselItem"

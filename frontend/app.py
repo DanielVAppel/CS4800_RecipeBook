@@ -33,7 +33,7 @@ def search_page():
 def create_page():
     return render_template("create.html", navItems=navItems)
 
-@app.route("/favorites")
+@app.route("/user")
 def favorites_page():
     # recommended dishes/recipes
     favoriteRecipes = generate_random_recipes()
