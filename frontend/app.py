@@ -12,12 +12,15 @@ app = Flask(__name__)
 # navigation tab
 navItems = ["search", "home", "create", "user"]
 
+recommendedRecipes = []
 
 @app.route("/")   
 @app.route("/home")
 def home_page():
     # recommended dishes/recipes
-    recommendedRecipes = generate_random_recipes()
+    global recommendedRecipes
+    if len(recommendedRecipes) == 0:
+        recommendedRecipes = generate_random_recipes()
     
     if len(recommendedRecipes) == 0:
         raise ValueError("No recipes returned by Spoonacular API")
@@ -40,7 +43,8 @@ uid = None
 @app.route("/user")
 def favorites_page():
     # recommended dishes/recipes
-    favoriteRecipes = generate_random_recipes()
+    global recommendedRecipes
+    favoriteRecipes = recommendedRecipes if len(recommendedRecipes) > 0 else generate_random_recipes()
     
     return render_template("favorites.html", navItems=navItems, favoriteRecipes=favoriteRecipes, uid=uid)
 
