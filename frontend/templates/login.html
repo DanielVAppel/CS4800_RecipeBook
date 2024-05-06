@@ -2,12 +2,11 @@
 {% block content %}
 <div class="loginContainer" style="display: block; text-align: center;">
    <label for="loginButton" style="color: #FFFFFF">Login</label>
-   <button type="button" id="loginButton">Login</button>
+   <button type="button" id="loginButton", onclick="console.log('fuck')">Login</button>
 </div>
 {% endblock %}
 
 {% block scripts %}
-{{ super() }}
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
 <script src="../static/js/loginScript.js"></script>

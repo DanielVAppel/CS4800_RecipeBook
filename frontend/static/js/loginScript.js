@@ -1,3 +1,7 @@
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+import { getFirestore, doc, setDoc, collection, addDoc, getDoc, } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
+
 const firebaseConfig = {
    apiKey: "AIzaSyCDHx8Nf9PVIsSWulOZLnLqUha9zLVExg0",
    authDomain: "recipe-cookbook-ada79.firebaseapp.com",
@@ -6,12 +10,21 @@ const firebaseConfig = {
    messagingSenderId: "307671574733",
    appId: "1:307671574733:web:feeeb24deb74dd299be184",
    measurementId: "G-4FH210WLMQ"
- };
-
-const firebaseApp = initializeApp(firebaseConfig);
-const firebaseAuth = getAuth(firebaseApp);
-firebaseAuth.languageCode = "en";
+};
+console.log("anything?");
 const authProvider = new GoogleAuthProvider();
+
+const googleSignIn = async () => {
+   try {
+      const firebaseApp = initializeApp(firebaseConfig);
+      const firebaseAuth = getAuth(firebaseApp);
+      firebaseAuth.languageCode = "en";
+
+   } catch (e) {
+      console.log(e.code, e.message)
+   }
+}
+googleSignIn();
 
 document.addEventListener("DOMContentLoaded", function () {
    console.log("DOMContentLoaded");
