@@ -18,39 +18,59 @@ const firebaseAuth = getAuth(firebaseApp);
 firebaseAuth.languageCode = "en";
 
 document.addEventListener("DOMContentLoaded", function () {
-	console.log("loginScript loaded");
+	const updateUserPage = (url, options = {}) => {
+		// route can be anything, you just have to make one in flask
+		// and ensure it matches this url
+		fetch(url, options)
+			.then((response) => response.text())
+			.then((data) => {
+				console.log(data);
+
+				const mainContainer = document.querySelector(".mainContainer");
+
+				const tempContainer = document.createElement("div");
+				tempContainer.innerHTML = data;
+
+				const tempMainContainer = tempContainer.querySelector(".mainContainer");
+
+				while (mainContainer.firstChild && mainContainer.children.length > 0) {
+					mainContainer.removeChild(mainContainer.firstChild);
+				}
+
+				tempMainContainer.childNodes.forEach((node) => {
+					if (node.nodeType !== Node.TEXT_NODE) {
+						mainContainer.appendChild(node);
+					}
+				});
+			});
+	};
+
 	// or however you want to grab the button element
 	const attachLoginEventListener = () => {
-		console.log("attached event listener to loginButton");
-		const loginButton = document.getElementById("loginButton");
-		console.log(loginButton);
+		// temporary solution :D
+		setTimeout(() => {
+			const loginButton = document.getElementById("loginButton");
 
-		// functionality for logging user in when button is clicked
-		loginButton.addEventListener("click", function (event) {
-			console.log("Login button clicked");
-			event.preventDefault();
-			signInWithPopup(firebaseAuth, authProvider).then((result) => {
-				console.log(result);
-				const { user } = result;
+			// functionality for logging user in when button is clicked
+			loginButton.addEventListener("click", function (event) {
+				signInWithPopup(firebaseAuth, authProvider).then((result) => {
+					console.log(result);
+					const { user } = result;
 
-				const options = {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(user),
-				};
+					const options = {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(user),
+					};
 
-				// route can be anything, you just have to make one in flask
-				// and ensure it matches this url
-				fetch("/loggedInUser", options)
-					.then((response) => response.text())
-					.then((data) => {
-						console.log(data);
-					});
+					updateUserPage("/signUserIn", options);
+				});
 			});
-		});
+		}, 1000);
 	};
+
 	const handleHashChange = () => {
 		const { hash } = window.location;
 

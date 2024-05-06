@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% if uid %}
 <div class="recipeCarouselContainer">
 	<div class="carouselCategory">
 		<span class="fontCategory fontWhite"> Favorite Recipes</span>
@@ -30,4 +32,10 @@
 		{% endfor %}
 	</ul>
 </div>
+{% else %}
+<div class="loginContainer" style="display: block; text-align: center;">
+   <div id="loginButton" style="color: #fff;">Login</div>
+</div>
+{% endif %}
+
 {% endblock %}
