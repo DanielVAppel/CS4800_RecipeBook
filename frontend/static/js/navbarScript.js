@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					case "create":
 						break;
 					case "user":
-					const exampleElement = tempContainer.querySelector(".loginContainer")
+						const exampleElement = tempContainer.querySelector(".loginContainer");
 						if (exampleElement == null) {
 							setDisplay(mainContainer, "grid");
 							const favoriteItems = tempContainer.querySelectorAll(".carouselItem"),
@@ -83,8 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
 							const favoriteItemText = createItemText(focusedFavoriteItem);
 							addClass(focusedFavoriteItem, "selectedItem");
 							focusedFavoriteItem.appendChild(favoriteItemText);
-						}
-						else {
+						} else {
 							setDisplay(mainContainer, "block");
 						}
 
