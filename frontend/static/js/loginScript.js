@@ -11,7 +11,7 @@ const firebaseConfig = {
    appId: "1:307671574733:web:feeeb24deb74dd299be184",
    measurementId: "G-4FH210WLMQ"
 };
-console.log("anything?");
+
 const authProvider = new GoogleAuthProvider();
 
 const googleSignIn = async () => {
@@ -24,19 +24,19 @@ const googleSignIn = async () => {
       console.log(e.code, e.message)
    }
 }
-googleSignIn();
 
 document.addEventListener("DOMContentLoaded", function () {
-   console.log("DOMContentLoaded");
+   console.log("loginScript loaded");
    // or however you want to grab the button element
    const attachLoginEventListener = () => {
-      console.log("eventHandlerCalled");
+      console.log("attached event listener to loginButton");
       const loginButton = document.getElementById("loginButton");
+      console.log(loginButton);
 
       // functionality for logging user in when button is clicked
       loginButton.addEventListener("click", function (event) {
+         console.log("Login button clicked");
          event.preventDefault();
-         console.log("button clicked");
          firebaseAuth.signInWithPopup(firebaseAuth, authProvider).then((result) => {
             console.log(result);
             const { user } = result;
@@ -46,13 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                // you can pass either the user or the result
-                //
-                // this will be sent to the flask app which you can
-                // then return a render_template (updated html page)
-                // and then you can just replace the current page content
-                // inside div.mainContainer with the content you just
-                // got from the updated html page
                 body: JSON.stringify(user),
             };
 
