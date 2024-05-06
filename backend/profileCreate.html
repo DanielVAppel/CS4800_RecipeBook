@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Page</title>
+</head>
+<body>
+   <form>
+    
+    <button type="submit" id="enterImageButton">
+      <img id = "buttonImage" src=""  />
+    </button><br>
+     
+    <input type="file" id="myFile" name="filename"><br><br>
+    <label for="nameInput">Name</label><br>
+    <input type="text" id="nameInput" name = "nameInput"><br><br>
+        
+   </form>
+
+   
+   <button id ="enterDataBtn">Save changes</button><br>
+   <button id="goBackBtn">Return</button>
+  
+  <script src="js/profileChanger.js" defer type="module"></script>
+  
+  <script>
+    // Retrieve docRef ID from localStorage
+    const docRefId = localStorage.getItem('docRef');
+  </script>
+
+</body>
+</html>

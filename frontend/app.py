@@ -12,12 +12,15 @@ app = Flask(__name__)
 # navigation tab
 navItems = ["search", "home", "create", "user"]
 
+recommendedRecipes = []
 
 @app.route("/")   
 @app.route("/home")
 def home_page():
     # recommended dishes/recipes
-    recommendedRecipes = generate_random_recipes()
+    global recommendedRecipes
+    if len(recommendedRecipes) == 0:
+        recommendedRecipes = generate_random_recipes()
     
     if len(recommendedRecipes) == 0:
         raise ValueError("No recipes returned by Spoonacular API")
@@ -29,16 +32,46 @@ def home_page():
 def search_page():
     return render_template("search.html", navItems=navItems, resultItems=[])
 
+
 @app.route("/create")
 def create_page():
     return render_template("create.html", navItems=navItems)
 
-@app.route("/favorites")
+
+uid = None
+
+@app.route("/user")
 def favorites_page():
     # recommended dishes/recipes
-    favoriteRecipes = generate_random_recipes()
+    global recommendedRecipes
+    favoriteRecipes = recommendedRecipes if len(recommendedRecipes) > 0 else generate_random_recipes()
+    
+    return render_template("favorites.html", navItems=navItems, favoriteRecipes=favoriteRecipes, uid=uid)
 
-    return render_template("favorites.html", navItems=navItems, favoriteRecipes=favoriteRecipes)
+
+@app.route("/signUserIn", methods=["POST"])
+def userLoggedIn():
+  # you could add smth that will get the query for which html page to render
+  userInfo = request.json
+  if userInfo != None:
+    print(userInfo)
+    
+    global uid
+    uid = userInfo['uid']
+    
+    response = requests.get(f'http://localhost:3000/users/{uid}')
+    
+    if response.status_code == 404:
+        body = {
+            'userID': uid,
+            # other data
+        }
+        response = requests.post('http://localhost:3000/users/', json=body)
+    else:
+        # userID, displayName, etc
+        response = response.json()
+    
+    return render_template("favorites.html", navItems=navItems, favoriteRecipes=[], uid=uid)
 
 
 # HELPER FUNCTIONS/ROUTES
@@ -140,6 +173,6 @@ def search_recipe_by_id(id):
         return data
     return None
         
-    
+
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if uid %}
+
+{% else %}
+<div class="loginContainer" style="display: block; text-align: center;">
+   <div id="loginButton" style="color: #fff;">Login</div>
+</div>
+{% endif %}
+
+{% endblock %}
