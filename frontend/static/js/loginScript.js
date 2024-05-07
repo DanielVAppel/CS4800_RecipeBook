@@ -75,6 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		const { hash } = window.location;
 
 		if (hash.includes("user")) attachLoginEventListener();
+		if (hash.includes("create")) attachLoginEventListener();
 	};
 
 	window.addEventListener("hashchange", handleHashChange);

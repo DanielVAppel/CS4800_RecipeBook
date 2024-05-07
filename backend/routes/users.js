@@ -61,13 +61,12 @@ router.get('/:id', async (req,res) => {
 
 //Create a new document in users collection, fields required should be "displayName", "photo", "userUID".
 //userUID should be the same as the docRef ID
-//EXAMPLE URL: http://localhost:3000/users/
-router.post('/', async (req,res) => {
+//EXAMPLE URL: http://localhost:3000/users/KbKURAhryoOJOYfrMx4jlVYg96j2
+router.post('/:id', async (req,res) => {
+    const id = req.params.id;
     const data = req.body;
 
-    const docRef = firestore.collection('users').doc();
-    await docRef.set(data);
-
+    const docRef = firestore.collection('users').doc(id);
     
     try {
         await docRef.set(data);

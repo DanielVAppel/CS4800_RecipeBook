@@ -13,6 +13,7 @@ app = Flask(__name__)
 navItems = ["search", "home", "create", "user"]
 
 recent_recipes = []
+uid = None
 
 @app.route("/")   
 @app.route("/home")
@@ -35,9 +36,9 @@ def search_page():
 
 @app.route("/create")
 def create_page():
-    return render_template("create.html", navItems=navItems)
+    return render_template("create.html", navItems=navItems, uid=uid)
 
-@app.route("/favorites")
+@app.route("/user")
 def favorites_page():
     # recommended dishes/recipes
     favoriteRecipes = generate_random_recipes()
