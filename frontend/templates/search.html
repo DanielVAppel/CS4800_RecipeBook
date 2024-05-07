@@ -6,6 +6,19 @@
 			<img class="itemImage" src="{{ url_for('static', filename='images/svg/search.svg')}}" alt="{{ item|capitalize }}" />
 		</div>
 	</div>
+	<div class="searchFilterContainer">
+		<ul class="filterList">
+			{% for filter in searchFilters %}
+			<li class="filterItem" data-filter="{{ filter|lower }}">
+				<div class="itemDetails">
+					<div class="hollowBox fontWhite">
+						<span class="fontSubtitle">{{ filter }}</span>
+					</div>
+				</div>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
 	<div class="searchResultContainer">
 		<ul class="resultList">
 			{% for item in resultItems %}
