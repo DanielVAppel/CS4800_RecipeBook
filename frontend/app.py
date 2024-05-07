@@ -12,6 +12,7 @@ app = Flask(__name__)
 # navigation tab
 navItems = ["search", "home", "create", "user"]
 
+recipe_cache = {}
 recent_recipes = []
 
 @app.route("/")   
@@ -47,6 +48,14 @@ def favorites_page():
 # HELPER FUNCTIONS/ROUTES
 # 
 # RB = recipe book
+@app.route("/show_recipe")
+def RB_show_recipe():
+    recipe_id = request.args.get('id')
+    
+    recipeItem = search_recipe_by_id(recipe_id)
+    
+    return render_template("recipe.html", recipeItem=recipeItem)
+
 # search function for when user is searching for recipes (search page)
 @app.route("/search_recipe")
 def RB_search_recipe():
@@ -78,6 +87,9 @@ def RB_search_recipe():
         # check if recipe data is retrieved from Spoonacular API
         if recipe_information != None:
             recipes_detailed.append(recipe_information)
+            
+            global recipe_cache
+            recipe_cache[id] = recipe_information
 
     if len(recipes_detailed) == 0:
         raise ValueError("Unable to retrieve recipes by id using Spoonacular API")
@@ -88,13 +100,14 @@ def RB_search_recipe():
 
 # generate home page "Recipe of the Day / Recommended Recipes"
 def generate_random_recipes():
+    global recent_recipes
     if len(recent_recipes) > 0:
         return recent_recipes
     
     url = 'https://api.spoonacular.com/recipes/random'
     params = {
         'apiKey': os.getenv("SPOONACULAR_API_KEY"),
-        'number': 1,
+        'number': 10,
     }
 
     response = requests.get(url, params=params)
@@ -107,6 +120,10 @@ def generate_random_recipes():
         for recipe in data['recipes']:
             recipe['summary'] = re.sub(clean, '', recipe['summary'])
             
+            global recipe_cache
+            recipe_cache[recipe['id']] = recipe
+            
+        recent_recipes = data['recipes']
         return data['recipes']
     else:
         raise RuntimeError(response.content)
@@ -137,7 +154,13 @@ def search_recipe_by_query(query, filter, limit=5):
     return []
 
 
-def search_recipe_by_id(id): 
+def search_recipe_by_id(id):
+    id = int(id)
+    
+    global recipe_cache
+    if id in recipe_cache:
+        return recipe_cache[id]
+    
     url = f'https://api.spoonacular.com/recipes/{id}/information'
     params = {
         'apiKey': os.getenv("SPOONACULAR_API_KEY")
@@ -146,10 +169,16 @@ def search_recipe_by_id(id):
     response = requests.get(url, params=params)
     if response.status_code == 200:
         data = response.json()
+        
+        clean = re.compile('<.*?>')
+        
+        data['summary'] = re.sub(clean, '', data['summary'])
+        
+        recipe_cache[data['id']] = data
 
         return data
     return None
-        
-    
+
+
 if __name__ == "__main__":
     app.run(debug=True)
