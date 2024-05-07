@@ -12,6 +12,7 @@ app = Flask(__name__)
 # navigation tab
 navItems = ["search", "home", "create", "user"]
 
+recent_recipes = []
 
 @app.route("/")   
 @app.route("/home")
@@ -27,7 +28,9 @@ def home_page():
 
 @app.route("/search")
 def search_page():
-    return render_template("search.html", navItems=navItems, resultItems=[])
+    filterItems = ['Vegetarian', 'Vegan', 'Gluten-Free', 'Appetizer', 'Main Course', 'Dessert']
+    
+    return render_template("search.html", navItems=navItems, searchFilters=filterItems, resultItems=[])
 
 @app.route("/create")
 def create_page():
@@ -48,12 +51,13 @@ def favorites_page():
 @app.route("/search_recipe")
 def RB_search_recipe():
     query = request.args.get('query')
+    filter = request.args.get('filter')
     
     # find all recipes that fit query
     # returns { offset, results: [{ id, title, image (unusable) }] }
     # 
     # https://spoonacular.com/food-api/docs#Search-Recipes-Complex
-    found_recipes = search_recipe_by_query(query=query)
+    found_recipes = search_recipe_by_query(query=query, filter=filter)
     
     if len(found_recipes) == 0:
         raise ValueError("No recipes returned by Spoonacular API")
@@ -74,7 +78,7 @@ def RB_search_recipe():
         # check if recipe data is retrieved from Spoonacular API
         if recipe_information != None:
             recipes_detailed.append(recipe_information)
-        
+
     if len(recipes_detailed) == 0:
         raise ValueError("Unable to retrieve recipes by id using Spoonacular API")
     
@@ -84,10 +88,13 @@ def RB_search_recipe():
 
 # generate home page "Recipe of the Day / Recommended Recipes"
 def generate_random_recipes():
+    if len(recent_recipes) > 0:
+        return recent_recipes
+    
     url = 'https://api.spoonacular.com/recipes/random'
     params = {
         'apiKey': os.getenv("SPOONACULAR_API_KEY"),
-        'number': 10,
+        'number': 1,
     }
 
     response = requests.get(url, params=params)
@@ -105,7 +112,7 @@ def generate_random_recipes():
         raise RuntimeError(response.content)
     
 
-def search_recipe_by_query(query, limit=5):
+def search_recipe_by_query(query, filter, limit=5):
     # /search returns { id, title, image (unusable), servings, RIM, sourceUrl }
     # /complexSearch returns { id, title, image }
     
@@ -115,6 +122,9 @@ def search_recipe_by_query(query, limit=5):
         'query': query,
         'number': limit
     }
+    
+    if filter is not None:
+        params['filter'] = filter
     
     response = requests.get(url, params=params)
     if response.status_code == 200:

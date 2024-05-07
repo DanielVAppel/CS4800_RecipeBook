@@ -7,7 +7,10 @@ const searchConfig = {
 	minimumTimeBetweenUpdates: 600, // delay between recipe list automatic search
 	lastUpdateTimestamp: new Date().getTime(),
 	hasChanged: false, // whether search input has been modified
-	inputQuery: null,
+	inputValue: {
+		query: null,
+		filter: null,
+	},
 };
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -17,11 +20,14 @@ document.addEventListener("DOMContentLoaded", function () {
 	root.style.setProperty("--input-focus", `${searchConfig.timing.inputFocus}ms`);
 
 	// handle the query search and page updates
-	const handleInputSearch = (query) => {
+	const handleInputSearch = ({ query, filter }) => {
 		const resultList = document.querySelector(".resultList");
 
+		var searchUrl = "/search_recipe?query=" + query;
+		if (filter) searchUrl += "&filter=" + filter;
+
 		// get recipe search results from app.py
-		fetch("/search_recipe?query=" + query)
+		fetch(searchUrl)
 			.then((response) => response.text())
 			.then((data) => {
 				/**
@@ -62,8 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		// automatically executes search query every 600ms interval
 		setInterval(() => {
 			// if no new changes or empty query, don't re-execute
-			console.log(!searchConfig.inputQuery);
-			if (!searchConfig.hasChanged || !searchConfig.inputQuery) return;
+			if (!searchConfig.hasChanged || !searchConfig.inputValue.query) return;
 
 			const now = new Date().getTime(),
 				hasBeenLongEnough = calcElapsedTime(searchConfig.lastUpdateTimestamp, now) > searchConfig.minimumTimeBetweenUpdates;
@@ -73,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				searchConfig.lastUpdateTimestamp = now;
 
 				// handle the query search and page updates
-				handleInputSearch(searchConfig.inputQuery);
+				handleInputSearch(searchConfig.inputValue);
 			}
 		}, searchConfig.minimumTimeBetweenUpdates);
 	};
@@ -85,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		const updateSearchConfig = () => {
 			searchConfig.hasChanged = true;
 			searchConfig.lastUpdateTimestamp = new Date().getTime();
-			searchConfig.inputQuery = recipeSearchInput.value;
+			searchConfig.inputValue.query = recipeSearchInput.value;
 		};
 
 		// execute search query by clicking on search icon
@@ -116,10 +121,35 @@ document.addEventListener("DOMContentLoaded", function () {
 		handleInputAutoUpdate();
 	};
 
+	const attachSearchFilterEventListener = () => {
+		const filterItems = document.querySelectorAll(".filterItem");
+
+		const focusItem = (focusedItem) => {
+			filterItems.forEach((item) => {
+				removeClass(item, "selectedItem");
+			});
+
+			addClass(focusedItem, "selectedItem");
+		};
+
+		for (let i = 0; i < filterItems.length; i++) {
+			const item = filterItems[i];
+
+			item.addEventListener("click", function (event) {
+				focusItem(item);
+
+				searchConfig.inputValue.filter = item.dataset.filter;
+			});
+		}
+	};
+
 	const handleHashChange = () => {
 		const { hash } = window.location;
 
-		if (hash.includes("search")) attachSearchRecipeEventListener();
+		if (hash.includes("search")) {
+			attachSearchRecipeEventListener();
+			attachSearchFilterEventListener();
+		}
 	};
 
 	window.addEventListener("hashchange", handleHashChange);

@@ -4,6 +4,7 @@
 	--ebony: rgb(23, 23, 23);
 	--ebony-50: rgba(23, 23, 23, 0.5);
 
+	--white-20: rgba(255, 255, 255, 0.2);
 	--white-10: rgba(255, 255, 255, 0.1);
 
 	--alto: rgb(215, 215, 215);
@@ -381,7 +382,7 @@ ul {
 	transition: opacity var(--hero-fade) var(--cbz);
 }
 
-.recipeSearchContainer > :is(.searchBarContainer, .searchResultContainer) {
+.recipeSearchContainer > :is(.searchBarContainer, .searchFilterContainer, .searchResultContainer) {
 	display: flex;
 	padding: 1rem;
 }
@@ -441,13 +442,48 @@ ul {
 	opacity: 0.8;
 }
 
+.recipeSearchContainer > .searchFilterContainer {
+	flex-direction: column;
+
+	padding-inline: 2rem;
+}
+
+.searchFilterContainer > .filterList {
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+
+	user-select: none;
+}
+
+.filterItem > .itemDetails > .hollowBox {
+	background-color: var(--white-10);
+
+	border: none;
+	padding: 0.5rem;
+
+	transition: color var(--item-focus), background-color var(--item-focus);
+}
+
+.filterItem.selectedItem > .itemDetails > .hollowBox {
+	color: var(--ebony);
+	background-color: var(--alto);
+}
+
+.filterItem:hover .hollowBox {
+	background-color: var(--white-20);
+}
+
+.recipeSearchContainer > :is(.searchFilterContainer, .searchResultContainer) {
+	padding-block: 0 !important;
+}
+
 .recipeSearchContainer > .searchResultContainer {
 	height: 100%;
 
 	scrollbar-width: none;
 	overflow-x: hidden;
 	overflow-y: scroll;
-	padding-block: 0 !important;
 }
 
 .searchResultContainer > .resultList {
