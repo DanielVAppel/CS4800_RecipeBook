@@ -38,6 +38,10 @@ document.addEventListener("DOMContentLoaded", function () {
 				const tempContainer = document.createElement("div");
 				tempContainer.innerHTML = data;
 
+				while (resultList.firstChild && resultList.children.length > 0) {
+					resultList.removeChild(resultList.firstChild);
+				}
+
 				const tempResultList = tempContainer.querySelector(".resultList");
 				// iterate through recipe search list and add html data
 				tempResultList.childNodes.forEach((node) => {
@@ -130,15 +134,23 @@ document.addEventListener("DOMContentLoaded", function () {
 			});
 
 			addClass(focusedItem, "selectedItem");
+			searchConfig.inputValue.filter = focusedItem.dataset.filter;
+		};
+
+		const unfocusItem = (focusedItem) => {
+			removeClass(focusedItem, "selectedItem");
+			searchConfig.inputValue.filter = null;
 		};
 
 		for (let i = 0; i < filterItems.length; i++) {
 			const item = filterItems[i];
 
 			item.addEventListener("click", function (event) {
-				focusItem(item);
-
-				searchConfig.inputValue.filter = item.dataset.filter;
+				if (item.classList.contains("selectedItem")) {
+					unfocusItem(item);
+				} else {
+					focusItem(item);
+				}
 			});
 		}
 	};
