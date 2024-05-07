@@ -4,4 +4,4 @@ A RecipeBook Website which allows users to create an account, search up their fa
 Created By:
 Daniel Appel (Front-End Project Manager)
 Justin Ta (Back-End Developer)
-(Add Your Name here above this line)
+Jane Barnett (Quality Assurance)

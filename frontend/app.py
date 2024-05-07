@@ -95,7 +95,7 @@ def generate_random_recipes():
     url = 'https://api.spoonacular.com/recipes/random'
     params = {
         'apiKey': os.getenv("SPOONACULAR_API_KEY"),
-        'number': 1
+        'number': 10
     }
 
     response = requests.get(url, params=params)
