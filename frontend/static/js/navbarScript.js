@@ -72,10 +72,11 @@ document.addEventListener("DOMContentLoaded", function () {
 						focusedItem.appendChild(itemText);
 						break;
 					case "create":
+						setDisplay(mainContainer, "block");
 						break;
 					case "user":
-						const exampleElement = tempContainer.querySelector(".loginContainer");
-						if (exampleElement == null) {
+						const exampleElement = tempContainer.querySelector(".carouselItem");
+						if (exampleElement != null) {
 							setDisplay(mainContainer, "grid");
 							const favoriteItems = tempContainer.querySelectorAll(".carouselItem"),
 								focusedFavoriteItem = favoriteItems[0];

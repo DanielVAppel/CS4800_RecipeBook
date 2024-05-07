@@ -13,6 +13,7 @@ app = Flask(__name__)
 navItems = ["search", "home", "create", "user"]
 
 recommendedRecipes = []
+uid = None
 
 @app.route("/")   
 @app.route("/home")
@@ -35,10 +36,7 @@ def search_page():
 
 @app.route("/create")
 def create_page():
-    return render_template("create.html", navItems=navItems)
-
-
-uid = None
+    return render_template("create.html", navItems=navItems, uid=uid)
 
 @app.route("/user")
 def favorites_page():
@@ -58,15 +56,19 @@ def userLoggedIn():
     
     global uid
     uid = userInfo['uid']
+    photoURL = userInfo['photoURL']
+    displayName = userInfo['displayName']
     
     response = requests.get(f'http://localhost:3000/users/{uid}')
     
     if response.status_code == 404:
         body = {
-            'userID': uid,
+            'displayName': displayName,
+            'photo': photoURL,
+            'userUID': uid,
             # other data
         }
-        response = requests.post('http://localhost:3000/users/', json=body)
+        response = requests.post(f'http://localhost:3000/users/{uid}', json=body)
     else:
         # userID, displayName, etc
         response = response.json()
