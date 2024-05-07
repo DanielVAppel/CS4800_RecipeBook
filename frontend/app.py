@@ -76,6 +76,34 @@ def userLoggedIn():
     return render_template("favorites.html", navItems=navItems, favoriteRecipes=[], uid=uid)
 
 
+@app.route("/createRecipe", methods=["POST"])
+def createRecipePost():
+  # you could add smth that will get the query for which html page to render
+  recipeInfo = request.json
+  if uid != None:
+    print('no login')
+    
+    name = recipeInfo['name']
+    servings = recipeInfo['servings']
+    time = recipeInfo['time']
+    ingredients = recipeInfo['ingredients']
+    equipment = recipeInfo['equipment']
+    instructions = recipeInfo['instructions']
+    
+    body = {
+        'recipeName': name,
+        'recipeServings': servings,
+        'recipeTime': time,
+        'recipeIngredients': ingredients,
+        'recipeEquipment': equipment,
+        'recipeInstructions': instructions
+        # other data
+    }
+    response = requests.post(f'http://localhost:3000/users/{uid}/customRecipe', json=body)
+    
+    return render_template("create.html", navItems=navItems, uid=uid)
+
+
 # HELPER FUNCTIONS/ROUTES
 # 
 # RB = recipe book
