@@ -150,7 +150,6 @@ def search_recipe_by_id(id):
 
         return data
     return None
-        
-    
+
 if __name__ == "__main__":
     app.run(debug=True)
