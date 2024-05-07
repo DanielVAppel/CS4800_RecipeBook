@@ -1,11 +1,12 @@
 // Handles carousel related events
 const carouselConfig = {
-	timing: {						// transition timings
+	timing: {
+		// transition timings
 		itemFocus: 350,
 		focusMaskDelay: 100,
 		heroDelay: 50,
 	},
-	scrollSpeed: 750, 				// horizontal distance scroll of mouse
+	scrollSpeed: 750, // horizontal distance scroll of mouse
 	minimumTimeBetweenScrolls: 600, // delay between scrolls for smooth transition
 	lastScrollTimestamp: new Date().getTime(),
 };
@@ -106,6 +107,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			removeClass(item, "selectedItem");
 			const itemText = item.querySelector(".itemText");
 			if (itemText) item.removeChild(itemText);
+
+			const anchor = item.querySelector('a[data-type="showRecipe"]');
+			anchor.removeEventListener("click", anchorEventHandler);
 		});
 
 		const itemText = createItemText(focusedItem);
@@ -113,6 +117,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		addClass(focusedItem, "selectedItem");
 		// adds the "Check Recipe" element to selected recipe
 		focusedItem.appendChild(itemText);
+
+		const anchor = focusedItem.querySelector('a[data-type="showRecipe"]');
+		attachSingleAnchorListener(anchor);
 
 		/**
 		 * This part is the transition handler between carousel recipe selections.
@@ -172,6 +179,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	// initial call to set up home page
 	(initScript = () => {
 		focusItem(carouselItems[0], true);
-		attachCarouselEventListeners();
+		attachSingleAnchorListener(carouselItems[0].querySelector('a[data-type="showRecipe"]'));
 	})();
 });

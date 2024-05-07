@@ -18,7 +18,8 @@
     text-transform: uppercase;
 }
 
-.fontSubtitle {
+.fontSubtitle,
+:is(.ingredientName, .instructionStep) .fontSubtitle {
     font-size: 20px;
 }
 
