@@ -46,15 +46,30 @@ const handlePageChange = (path, callback = function () {}) => {
 						focusedItem = carouselItems[0];
 					const itemText = createItemText(focusedItem);
 
-					addClass(focusedItem, "selectedItem");
-					focusedItem.appendChild(itemText);
-					break;
-				case "create":
-				case "user":
-					break;
-				default:
-					return;
-			}
+						addClass(focusedItem, "selectedItem");
+						focusedItem.appendChild(itemText);
+						break;
+					case "create":
+						setDisplay(mainContainer, "block");
+						break;
+					case "user":
+						const exampleElement = tempContainer.querySelector(".carouselItem");
+						if (exampleElement != null) {
+							setDisplay(mainContainer, "grid");
+							const favoriteItems = tempContainer.querySelectorAll(".carouselItem"),
+								focusedFavoriteItem = favoriteItems[0];
+
+							const favoriteItemText = createItemText(focusedFavoriteItem);
+							addClass(focusedFavoriteItem, "selectedItem");
+							focusedFavoriteItem.appendChild(favoriteItemText);
+						} else {
+							setDisplay(mainContainer, "block");
+						}
+
+						break;
+					default:
+						return;
+				}
 
 			const tempMainContainer = tempContainer.querySelector(".mainContainer");
 

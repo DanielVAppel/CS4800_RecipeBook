@@ -1,33 +1,41 @@
 {% extends "base.html" %} 
 
 {% block content %}
+
+{% if uid %}
 <div class="recipeCreateContainer" style="display: block; text-align: center;">
-   <form action="" method="post" style="display: inline-block; margin: auto; text-align: left;">
-      <label for="recipeName" style="color: #FFFFFF">Recipe Name</label>
-      <br>
-      <input required type="text" id="recipeName" name="recipeName" placeholder="Name">
-      <br><br>
-      <label for="recipeServings" style="color: #FFFFFF">Servings</label>
-      <br>
-      <input type="number" id="recipeServings" name="recipeServings" placeholder="Servings">
-      <br><br>
-      <label for="recipeTime" style="color: #FFFFFF">Cook Time</label>
-      <br>
-      <input type="number" id="recipeTime" name="recipeTime" placeholder="Cook Time">
-      <br><br>
-      <label for="recipeIngredients" style="color: #FFFFFF">Ingredients</label>
-      <br>
-      <textarea required name="recipeIngredients" id="recipeIngredients" placeholder="Ingredients" style="width: 100%; resize: none;"></textarea>
-      <br><br>
-      <label for="recipeEquipment" style="color: #FFFFFF">Equipment</label>
-      <br>
-      <textarea name="recipeEquipment" id="recipeEquipment" placeholder="Equipment" style="width: 100%; resize: none;"></textarea>
-      <br><br>
-      <label for="recipeInstructions" style="color: #FFFFFF">Instructions</label>
-      <br>
-      <textarea required name="recipeInstructions" id="recipeInstructions" placeholder="Instructions" style="width: 100%; resize: none;"></textarea>
-      <br><br>
-      <button type="submit">Create Recipe</button>
-   </form>
+   <!-- <form action="" method="post" style="display: inline-block; margin: auto; text-align: left;"> -->
+   <label for="recipeName" style="color: #FFFFFF">Recipe Name</label>
+   <br>
+   <input required type="text" id="recipeName" name="recipeName" placeholder="Name">
+   <br><br>
+   <label for="recipeServings" style="color: #FFFFFF">Servings</label>
+   <br>
+   <input type="number" id="recipeServings" name="recipeServings" placeholder="Servings">
+   <br><br>
+   <label for="recipeTime" style="color: #FFFFFF">Cook Time</label>
+   <br>
+   <input type="number" id="recipeTime" name="recipeTime" placeholder="Cook Time">
+   <br><br>
+   <label for="recipeIngredients" style="color: #FFFFFF">Ingredients</label>
+   <br>
+   <textarea required name="recipeIngredients" id="recipeIngredients" placeholder="Ingredients" style="width: 100%; resize: none;"></textarea>
+   <br><br>
+   <label for="recipeEquipment" style="color: #FFFFFF">Equipment</label>
+   <br>
+   <textarea name="recipeEquipment" id="recipeEquipment" placeholder="Equipment" style="width: 100%; resize: none;"></textarea>
+   <br><br>
+   <label for="recipeInstructions" style="color: #FFFFFF">Instructions</label>
+   <br>
+   <textarea required name="recipeInstructions" id="recipeInstructions" placeholder="Instructions" style="width: 100%; resize: none;"></textarea>
+   <br><br>
+   <button id="submitButton">Create Recipe</button>
+   <!-- </form> -->
 </div>
+{% else %}
+<div class="loginContainer" style="display: block; text-align: center;">
+   <div id="loginButton" style="color: #fff;">Login</div>
+</div>
+{% endif %}
+
 {% endblock %}

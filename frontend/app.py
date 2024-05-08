@@ -14,6 +14,7 @@ navItems = ["search", "home", "create", "user"]
 
 recipe_cache = {}
 recent_recipes = []
+uid = None
 
 @app.route("/")   
 @app.route("/home")
@@ -23,7 +24,7 @@ def home_page():
     
     if len(recommendedRecipes) == 0:
         raise ValueError("No recipes returned by Spoonacular API")
-
+    
     return render_template("home.html", navItems=navItems, recommendedRecipes=recommendedRecipes)
 
 
@@ -33,17 +34,22 @@ def search_page():
     
     return render_template("search.html", navItems=navItems, searchFilters=filterItems, resultItems=[])
 
+
 @app.route("/create")
 def create_page():
-    return render_template("create.html", navItems=navItems)
+    return render_template("create.html", navItems=navItems, uid=uid)
 
-@app.route("/favorites")
+@app.route("/user")
 def favorites_page():
+    # gets all of user's created recipes
+    createdRecipes = []
+    createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipe')
+    createdRecipes = createdRecipes.json()
+
     # recommended dishes/recipes
     favoriteRecipes = generate_random_recipes()
 
     return render_template("favorites.html", navItems=navItems, favoriteRecipes=favoriteRecipes)
-
 
 # HELPER FUNCTIONS/ROUTES
 # 
@@ -107,7 +113,7 @@ def generate_random_recipes():
     url = 'https://api.spoonacular.com/recipes/random'
     params = {
         'apiKey': os.getenv("SPOONACULAR_API_KEY"),
-        'number': 10,
+        'number': 10
     }
 
     response = requests.get(url, params=params)
@@ -178,6 +184,7 @@ def search_recipe_by_id(id):
 
         return data
     return None
+
 
 
 if __name__ == "__main__":
