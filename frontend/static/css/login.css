@@ -1,0 +1,23 @@
+
+.loginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #000; /* Setting the background to black */
+}
+
+#loginButton {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 20px; /* Larger font size */
+    background-color: #4285F4; /* Google blue color, adjust if needed */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#loginButton:hover {
+    background-color: #357ae8; /* Slightly darker on hover */
+}
