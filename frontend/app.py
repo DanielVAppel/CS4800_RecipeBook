@@ -40,11 +40,16 @@ def create_page():
 
 @app.route("/user")
 def favorites_page():
+    # gets all of user's created recipes
+    createdRecipes = []
+    createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipe')
+    createdRecipes = createdRecipes.json()
+
     # recommended dishes/recipes
     global recommendedRecipes
     favoriteRecipes = recommendedRecipes if len(recommendedRecipes) > 0 else generate_random_recipes()
     
-    return render_template("favorites.html", navItems=navItems, favoriteRecipes=favoriteRecipes, uid=uid)
+    return render_template("favorites.html", navItems=navItems, favoriteRecipes=favoriteRecipes, createdRecipes=createdRecipes, uid=uid)
 
 
 @app.route("/signUserIn", methods=["POST"])
@@ -73,8 +78,11 @@ def userLoggedIn():
         # userID, displayName, etc
         response = response.json()
     
-    return render_template("favorites.html", navItems=navItems, favoriteRecipes=[], uid=uid)
-
+    # gets all of user's created recipes
+    createdRecipes = []
+    createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipe')
+    createdRecipes = createdRecipes.json()
+    return render_template("favorites.html", navItems=navItems, favoriteRecipes=[], createdRecipes=createdRecipes, uid=uid)
 
 @app.route("/createRecipe", methods=["POST"])
 def createRecipePost():
