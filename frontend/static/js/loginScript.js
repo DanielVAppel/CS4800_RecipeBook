@@ -19,14 +19,14 @@ firebaseAuth.languageCode = "en";
 
 document.addEventListener("DOMContentLoaded", function () {
 	var carouselItems = document.querySelectorAll(".carouselItem"),
-	heroImage = document.getElementById("heroImage"),
-	heroTextWrapper = document.getElementById("heroTextWrapper"),
-	heroTitle = document.querySelector(".heroTitle"),
-	subsectionServings = document.querySelector(".heroSubsection > .fontSubtitle"),
-	// ready in minutes (RIM)
-	subsectionRIM = document.querySelector(".heroSubsection > .hollowBox > .fontSubtitle"),
-	heroSubtitle = document.querySelector(".heroSubtitle > .fontSubtitle"),
-	heroDescription = document.querySelector(".heroDescription");
+		heroImage = document.getElementById("heroImage"),
+		heroTextWrapper = document.getElementById("heroTextWrapper"),
+		heroTitle = document.querySelector(".heroTitle"),
+		subsectionServings = document.querySelector(".heroSubsection > .fontSubtitle"),
+		// ready in minutes (RIM)
+		subsectionRIM = document.querySelector(".heroSubsection > .hollowBox > .fontSubtitle"),
+		heroSubtitle = document.querySelector(".heroSubtitle > .fontSubtitle"),
+		heroDescription = document.querySelector(".heroDescription");
 
 	const updateUserPage = (url, options = {}) => {
 		// route can be anything, you just have to make one in flask
@@ -42,8 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				tempContainer.innerHTML = data;
 
 				const tempMainContainer = tempContainer.querySelector(".mainContainer");
-				if (window.location.hash.includes("user")) setDisplay(mainContainer, "grid")
-					
+				if (window.location.hash.includes("user")) setDisplay(mainContainer, "grid");
 
 				while (mainContainer.firstChild && mainContainer.children.length > 0) {
 					mainContainer.removeChild(mainContainer.firstChild);
@@ -55,7 +54,10 @@ document.addEventListener("DOMContentLoaded", function () {
 					}
 				});
 			})
-			.finally(attachCarouselEventListeners);
+			.finally(() => {
+				attachCarouselEventListeners();
+				focusItem(carouselItems[0]);
+			});
 	};
 
 	const attachCarouselEventListeners = () => {
@@ -98,6 +100,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			removeClass(item, "selectedItem");
 			const itemText = item.querySelector(".itemText");
 			if (itemText) item.removeChild(itemText);
+
+			const anchor = item.querySelector('a[data-type="showRecipe"]');
+			anchor.removeEventListener("click", anchorEventHandler);
 		});
 
 		const itemText = createItemText(focusedItem);
@@ -105,6 +110,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		addClass(focusedItem, "selectedItem");
 		// adds the "Check Recipe" element to selected recipe
 		focusedItem.appendChild(itemText);
+
+		const anchor = focusedItem.querySelector('a[data-type="showRecipe"]');
+		attachSingleAnchorListener(anchor);
 
 		/**
 		 * This part is the transition handler between carousel recipe selections.
@@ -138,12 +146,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		}, itemFocus + heroDelay * 5);
 	};
 
-
-
-
-
-
-
 	// or however you want to grab the button element
 	const attachLoginEventListener = () => {
 		// temporary solution :D
@@ -164,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function () {
 						body: JSON.stringify(user),
 					};
 
-					updateUserPage("/signUserIn?fileName="+window.location.hash.replace("#",""), options);
+					updateUserPage("/signUserIn?fileName=" + window.location.hash.replace("#", ""), options);
 				});
 			});
 		}, 1000);
@@ -173,8 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const handleHashChange = () => {
 		const { hash } = window.location;
 
-		if (hash.includes("user")) attachLoginEventListener();
-		if (hash.includes("create")) attachLoginEventListener();
+		if (hash.includes("user") || hash.includes("create")) attachLoginEventListener();
 		if (hash.includes("user")) attachCarouselEventListeners();
 	};
 

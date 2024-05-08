@@ -61,7 +61,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
          updateCreatePage("/createRecipe", options);
          alert("Recipe Created");
-         attachCreateEventListener();
 		});
 	};
 

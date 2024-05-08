@@ -20,9 +20,7 @@ uid = None
 @app.route("/home")
 def home_page():
     # recommended dishes/recipes
-    global recommendedRecipes
-    if len(recommendedRecipes) == 0:
-        recommendedRecipes = generate_random_recipes()
+    recommendedRecipes = generate_random_recipes()
     
     if len(recommendedRecipes) == 0:
         raise ValueError("No recipes returned by Spoonacular API")
@@ -45,12 +43,18 @@ def create_page():
 def user_page():
     # gets all of user's created recipes
     createdRecipes = []
-    createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipe')
+    global uid
+    createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipes')
     createdRecipes = createdRecipes.json()
 
     # recommended dishes/recipes
-    global recommendedRecipes
-    favoriteRecipes = recommendedRecipes if len(recommendedRecipes) > 0 else generate_random_recipes()
+    recipeIdList = requests.get(f'http://localhost:3000/users/{uid}/favoriteRecipeList')
+    recipeIdList = recipeIdList.json()
+    
+    favoriteRecipes = []
+    if len(recipeIdList) != 0:
+        for id in recipeIdList['recipeIdList']:
+            favoriteRecipes.append(search_recipe_by_id(id))
 
     return render_template("user.html", navItems=navItems, favoriteRecipes=favoriteRecipes, createdRecipes=createdRecipes, uid=uid)
 
@@ -61,8 +65,6 @@ def userLoggedIn():
   # you could add smth that will get the query for which html page to render
     userInfo = request.json
     if userInfo != None:
-        print(userInfo)
-    
         global uid
         uid = userInfo['uid']
         photoURL = userInfo['photoURL']
@@ -75,6 +77,7 @@ def userLoggedIn():
                 'displayName': displayName,
                 'photo': photoURL,
                 'userUID': uid,
+                'savedRecipes': []
                 # other data
             }
             response = requests.post(f'http://localhost:3000/users/{uid}', json=body)
@@ -84,18 +87,25 @@ def userLoggedIn():
 
         # gets all of user's created recipes
         createdRecipes = []
-        createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipe')
+        createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipes')
         createdRecipes = createdRecipes.json()
-        print(createdRecipes)
-        return render_template(f"{query}.html", navItems=navItems, favoriteRecipes=recommendedRecipes, createdRecipes=createdRecipes, uid=uid)
+        
+        recipeIdList = requests.get(f'http://localhost:3000/users/{uid}/favoriteRecipeList')
+        recipeIdList = recipeIdList.json()
+    
+        favoriteRecipes = []
+        if len(recipeIdList) != 0:
+            for id in recipeIdList['recipeIdList']:
+                favoriteRecipes.append(search_recipe_by_id(id))
+                
+        return render_template(f"{query}.html", navItems=navItems, favoriteRecipes=favoriteRecipes, createdRecipes=createdRecipes, uid=uid)
 
 @app.route("/createRecipe", methods=["POST"])
 def createRecipePost():
   # you could add smth that will get the query for which html page to render
   recipeInfo = request.json
+  global uid
   if uid != None:
-    print('no login')
-    
     name = recipeInfo['name']
     servings = recipeInfo['servings']
     time = recipeInfo['time']
@@ -115,6 +125,18 @@ def createRecipePost():
     response = requests.post(f'http://localhost:3000/users/{uid}/customRecipe', json=body)
     
     return render_template("create.html", navItems=navItems, uid=uid)
+
+
+@app.route("/favoriteRecipe", methods=["POST"])
+def favoriteRecipe():
+    recipeInfo = request.json
+    
+    if uid != None:
+        body = {
+            'recipeId': recipeInfo['id']
+        }
+        
+        response = requests.post(f'http://localhost:3000/users/{uid}/favoriteRecipe', json=body)
 
 
 # HELPER FUNCTIONS/ROUTES

@@ -20,7 +20,7 @@
 			data-source="{{ recipe.spoonacularSourceUrl }}"
 			data-cuisines=" {{ recipe.cuisines }}"
 		>
-			<a href="{{ recipe.spoonacularSourceUrl }}" class="itemImageWrapper">
+			<a href="#recipe" data-type="showRecipe" data-id="{{ recipe.id }}" class="itemImageWrapper">
 				<div class="itemImage">
 					<img src="{{ recipe.image }}" alt="{{ recipe.name }}" />
 					<div class="imageMask">
