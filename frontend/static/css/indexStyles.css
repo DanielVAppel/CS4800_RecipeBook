@@ -4,7 +4,6 @@
 	--ebony: rgb(23, 23, 23);
 	--ebony-50: rgba(23, 23, 23, 0.5);
 
-	--white-20: rgba(255, 255, 255, 0.2);
 	--white-10: rgba(255, 255, 255, 0.1);
 
 	--alto: rgb(215, 215, 215);
@@ -339,7 +338,6 @@ ul {
 	transform: scale(1.08);
 }
 
-.recipeItemContainer .imageMask,
 .recipeCarousel > .carouselItem > .itemImageWrapper > .itemImage > .imageMask {
 	height: 100%;
 	width: 100%;
@@ -351,7 +349,6 @@ ul {
 	background-color: var(--ebony-50);
 }
 
-.recipeItemContainer .imageMask > .maskIcon,
 .recipeCarousel > .carouselItem .imageMask > .maskIcon {
 	height: 50%;
 	width: 50%;
@@ -365,7 +362,6 @@ ul {
 	transition: opacity var(--item-mask);
 }
 
-.recipeItemContainer .imageMask > .maskIcon,
 .recipeCarousel > .carouselItem.selectedItem:hover .imageMask > .maskIcon {
 	opacity: 0.8;
 }
@@ -502,7 +498,7 @@ ul {
 	transition: opacity var(--hero-fade) var(--cbz);
 }
 
-.recipeSearchContainer > :is(.searchBarContainer, .searchFilterContainer, .searchResultContainer) {
+.recipeSearchContainer > :is(.searchBarContainer, .searchResultContainer) {
 	display: flex;
 	padding: 1rem;
 }
@@ -562,48 +558,13 @@ ul {
 	opacity: 0.8;
 }
 
-.recipeSearchContainer > .searchFilterContainer {
-	flex-direction: column;
-
-	padding-inline: 2rem;
-}
-
-.searchFilterContainer > .filterList {
-	display: flex;
-	flex-direction: row;
-	gap: 1rem;
-
-	user-select: none;
-}
-
-.filterItem > .itemDetails > .hollowBox {
-	background-color: var(--white-10);
-
-	border: none;
-	padding: 0.5rem;
-
-	transition: color var(--item-focus), background-color var(--item-focus);
-}
-
-.filterItem.selectedItem > .itemDetails > .hollowBox {
-	color: var(--ebony);
-	background-color: var(--alto);
-}
-
-.filterItem:hover .hollowBox {
-	background-color: var(--white-20);
-}
-
-.recipeSearchContainer > :is(.searchFilterContainer, .searchResultContainer) {
-	padding-block: 0 !important;
-}
-
 .recipeSearchContainer > .searchResultContainer {
 	height: 100%;
 
 	scrollbar-width: none;
 	overflow-x: hidden;
 	overflow-y: scroll;
+	padding-block: 0 !important;
 }
 
 .searchResultContainer > .resultList {
@@ -705,148 +666,6 @@ ul {
 .searchResultContainer > .resultList > .resultItem > .itemTextWrapper > .itemDetailsContainer:hover > .itemNameContainer > .itemFavoriteWrapper > .itemFavorite {
 	visibility: visible;
 	opacity: 1;
-}
-
-.recipeItemContainer {
-	height: 100%;
-
-	display: flex;
-	flex-direction: column;
-
-	scrollbar-width: none;
-	overflow-y: scroll;
-}
-
-.recipeItemContainer > .heroContainer {
-	min-height: 50%;
-	grid-template-columns: 1fr;
-}
-
-.recipeItemContainer > .heroContainer > .button {
-	position: absolute;
-	height: 100%;
-	max-height: 50px;
-	width: 100%;
-	max-width: 50px;
-
-	top: 0;
-	left: 0;
-	z-index: 1;
-	margin-top: 2rem;
-	margin-left: 2rem;
-
-	color: white;
-}
-
-.recipeItemContainer .button:hover .maskIcon {
-	opacity: 1;
-}
-
-.recipeItemContainer > .heroContainer > .heroTextContainer {
-	margin-inline: auto;
-}
-
-.recipeItemContainer > .heroContainer > .heroTextContainer > .heroTextWrapper {
-	text-align: center;
-}
-
-.recipeItemContainer .heroSubsection {
-	justify-content: center;
-}
-
-.recipeItemContainer .imageMask > .maskIcon {
-	height: 100%;
-	width: 100%;
-}
-
-.recipeItemContainer > .heroContainer > .imageMask {
-	background: rgb(0 0 0 / 55%);
-	/* background: linear-gradient(to right, rgb(0 0 0 / 85%) 20%, rgb(0 0 0 / 0%) 80%); */
-}
-
-.recipeItemContainer > .heroContainer > .imageBottomFade {
-	background-image: linear-gradient(180deg, transparent, rgb(0 0 0 / 61%), var(--eerie-black));
-}
-
-.recipeItemContainer .heroTextWrapper {
-	opacity: 1;
-}
-
-.recipeItemContainer > .itemNameWrapper {
-	padding-block: 2rem;
-}
-
-.recipeItemContainer > .itemInfoContainer {
-	height: 100%;
-
-	display: flex;
-	flex-direction: column;
-}
-
-.recipeItemContainer > .itemInfoContainer > .itemSummaryContainer,
-.recipeItemContainer > .itemInfoContainer > :is(.itemIngredientsContainer, .itemInstructionsContainer) {
-	width: clamp(400px, 100vw, 1000px);
-	margin-inline: auto;
-}
-
-.recipeItemContainer > .itemInfoContainer > .itemSummaryContainer {
-	position: relative;
-
-	padding-block: 5rem;
-	padding-block-start: 2.5rem;
-}
-
-.recipeItemContainer > .itemInfoContainer > :is(.itemSummaryContainer, .itemIngredientsContainer)::after {
-	content: "";
-	position: absolute;
-
-	width: 50%;
-	height: 1px;
-
-	background-color: var(--white-20);
-	bottom: 0;
-	left: 50%;
-	transform: translate(-50%, -2.5rem);
-}
-
-.recipeItemContainer > .itemInfoContainer > .itemSummaryContainer > .heroDescription {
-	width: 100%;
-
-	display: block;
-	font-size: 20px;
-	line-height: 1.5;
-}
-
-.recipeItemContainer > .itemInfoContainer > .itemIngredientsContainer {
-	position: relative;
-
-	padding-bottom: 5rem;
-}
-
-.recipeItemContainer > .itemInfoContainer > .itemInstructionsContainer {
-	position: relative;
-
-	padding-bottom: 2.5rem;
-}
-
-.itemIngredientsContainer > .itemIngredientList,
-.itemInstructionsContainer > .itemInstructionList {
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-
-	padding-top: 1rem;
-}
-
-.itemInstructionsContainer > .itemInstructionList {
-	margin-left: 2rem;
-}
-
-.itemInstructionsContainer > .itemInstructionList > .itemInstruction > .instructionStep > span::before {
-	content: attr(data-index) ". ";
-	position: absolute;
-
-	left: 0;
 }
 
 @media screen and (min-width: 1440px) {

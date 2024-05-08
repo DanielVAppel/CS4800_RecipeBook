@@ -18,8 +18,7 @@
     text-transform: uppercase;
 }
 
-.fontSubtitle,
-:is(.ingredientName, .instructionStep) .fontSubtitle {
+.fontSubtitle {
     font-size: 20px;
 }
 
@@ -33,8 +32,7 @@
     font-size: 14px;
 }
 
-:is(.searchBarContainer, .itemDetailsContainer) .fontTitle,
-.filterItem .fontSubtitle {
+:is(.searchBarContainer, .itemDetailsContainer) .fontTitle {
     font-size: 16px;
     line-height: normal;
     text-transform: none;

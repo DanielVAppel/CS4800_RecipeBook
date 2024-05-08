@@ -6,19 +6,6 @@
 			<img class="itemImage" src="{{ url_for('static', filename='images/svg/search.svg')}}" alt="{{ item|capitalize }}" />
 		</div>
 	</div>
-	<div class="searchFilterContainer">
-		<ul class="filterList">
-			{% for filter in searchFilters %}
-			<li class="filterItem" data-filter="{{ filter|lower }}">
-				<div class="itemDetails">
-					<div class="hollowBox fontWhite">
-						<span class="fontSubtitle">{{ filter }}</span>
-					</div>
-				</div>
-			</li>
-			{% endfor %}
-		</ul>
-	</div>
 	<div class="searchResultContainer">
 		<ul class="resultList">
 			{% for item in resultItems %}
@@ -28,7 +15,7 @@
                 data-title="{{ item.title }}"
 				data-cookingtime="{{ item.readyInMinutes }}"
 			>
-				<a href="#recipe" data-type="showRecipe" data-id="{{ item.id }}" class="itemImageWrapper">
+				<a href="{{ item.spoonacularSourceUrl }}" class="itemImageWrapper">
 					<div class="itemImage">
 						<img src="{{ item.image }}" alt="{{ item.title }}" />
 					</div>
@@ -36,7 +23,7 @@
 				<div class="itemTextWrapper">
 					<div class="itemDetailsContainer">
 						<div class="itemNameContainer">
-							<a href="#recipe" data-type="showRecipe" data-id="{{ item.id }}" class="itemNameWrapper">
+							<a href="{{ item.spoonacularSourceUrl }}" class="itemNameWrapper">
 								<span class="fontTitle fontWhite">{{ item.title }}</span>
 							</a>
 							<div class="itemFavoriteWrapper">

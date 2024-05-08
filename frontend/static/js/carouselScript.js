@@ -1,12 +1,11 @@
 // Handles carousel related events
 const carouselConfig = {
-	timing: {
-		// transition timings
+	timing: {						// transition timings
 		itemFocus: 350,
 		focusMaskDelay: 100,
 		heroDelay: 50,
 	},
-	scrollSpeed: 750, // horizontal distance scroll of mouse
+	scrollSpeed: 750, 				// horizontal distance scroll of mouse
 	minimumTimeBetweenScrolls: 600, // delay between scrolls for smooth transition
 	lastScrollTimestamp: new Date().getTime(),
 };
@@ -107,9 +106,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			removeClass(item, "selectedItem");
 			const itemText = item.querySelector(".itemText");
 			if (itemText) item.removeChild(itemText);
-
-			const anchor = item.querySelector('a[data-type="showRecipe"]');
-			anchor.removeEventListener("click", anchorEventHandler);
 		});
 
 		const itemText = createItemText(focusedItem);
@@ -117,9 +113,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		addClass(focusedItem, "selectedItem");
 		// adds the "Check Recipe" element to selected recipe
 		focusedItem.appendChild(itemText);
-
-		const anchor = focusedItem.querySelector('a[data-type="showRecipe"]');
-		attachSingleAnchorListener(anchor);
 
 		/**
 		 * This part is the transition handler between carousel recipe selections.
@@ -153,30 +146,25 @@ document.addEventListener("DOMContentLoaded", function () {
 		}, itemFocus + heroDelay * 5);
 	};
 
-	const attachCarouselScrollListener = () => {
-		// handle user scroll in carousel (default scroll does not work)
-		const carousel = document.querySelector(".recipeCarousel");
-		carousel.addEventListener("mousewheel", function (event) {
-			event.preventDefault();
+	// handle user scroll in carousel (default scroll does not work)
+	const carousel = document.querySelector(".recipeCarousel");
+	carousel.addEventListener("mousewheel", function (event) {
+		event.preventDefault();
 
-			const now = new Date().getTime(),
-				hasBeenLongEnough = calcElapsedTime(carouselConfig.lastScrollTimestamp, now) > carouselConfig.minimumTimeBetweenScrolls;
+		const now = new Date().getTime(),
+			hasBeenLongEnough = calcElapsedTime(carouselConfig.lastScrollTimestamp, now) > carouselConfig.minimumTimeBetweenScrolls;
 
-			// only allow user to scroll once per 600ms
-			if (hasBeenLongEnough) {
-				carousel.scrollLeft += (event.deltaY > 0 ? 1 : -1) * scrollSpeed;
-				carouselConfig.lastScrollTimestamp = now;
-			}
-		});
-	};
+		// only allow user to scroll once per 600ms
+		if (hasBeenLongEnough) {
+			carousel.scrollLeft += (event.deltaY > 0 ? 1 : -1) * scrollSpeed;
+			carouselConfig.lastScrollTimestamp = now;
+		}
+	});
 
 	const handleHashChange = () => {
 		const { hash } = window.location;
 
-		if (hash.includes("home")) {
-			attachCarouselEventListeners();
-			attachCarouselScrollListener();
-		}
+		if (hash.includes("home")) attachCarouselEventListeners();
 		if (hash.includes("user")) attachCarouselEventListeners();
 	};
 
@@ -185,7 +173,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	// initial call to set up home page
 	(initScript = () => {
 		focusItem(carouselItems[0], true);
-		attachSingleAnchorListener(carouselItems[0].querySelector('a[data-type="showRecipe"]'));
-		attachCarouselScrollListener();
+		attachCarouselEventListeners();
 	})();
 });
