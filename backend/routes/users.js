@@ -86,7 +86,7 @@ router.put('/:id', async (req,res) => {
     
     try {
         await docRef.update(data);
-        res.status(200).send("Successfully updated" + docRef.id);
+        res.status(200).send("Successfully updated:" + docRef.id);
     } catch (error) {
         res.status(500).send("Error occurred while trying to update the document");
     }
@@ -118,6 +118,63 @@ router.post('/:id/customRecipe', async (req,res) => {
         res.status(500).send("Error occurred while trying to create recipe");
     }
     
+})
+
+//Get all custom recipes of user
+//EXAMPLE URL: http://localhost:3000/users/KbKURAhryoOJOYfrMx4jlVYg96j2/customRecipe/
+router.get('/:id/customRecipe/', async (req,res) => {
+    const id = req.params.id;
+    const recipes = [];
+
+    const querySnapshot = await firestore.collection('users').doc(id).collection('customRecipes').get();
+    querySnapshot.forEach((doc) => {
+        console.log(doc.id)
+        recipes.push({
+            name: doc.get("name"),
+            servings: doc.get("servings"),
+            cookTime: doc.get("cookTime"),
+            ingredients: doc.get("ingredients"),
+            equipment: doc.get("equipment"),
+            instructions: doc.get("instructions")
+        })
+    })
+    res.status(200).send(recipes);
+    
+})
+//Get custom recipe
+//EXAMPLE URL: http://localhost:3000/users/KbKURAhryoOJOYfrMx4jlVYg96j2/customRecipe/bruh
+router.get('/:id/customRecipe/:recipeID', async (req,res) => {
+    const id = req.params.id;
+    const recipeID = req.params.recipeID;
+    const recipeRef = firestore.collection('users').doc(id).collection('customRecipes').doc(recipeID);
+
+    try{
+        const doc = await recipeRef.get();
+        if(!doc.exists){
+            res.status(404).send('Recipe not found')
+        } else {
+            const recipeData = doc.data();
+            res.status(200).send(recipeData)
+        }
+    } catch(error){
+        res.status(500).send("Error occurred while trying to retrieve recipe")
+    }
+})
+
+//Update a custom recipe 
+//EXAMPLE URL: http://localhost:3000/users/KbKURAhryoOJOYfrMx4jlVYg96j2/customRecipe/bruh
+router.put('/:id/customRecipe/:recipeID', async (req,res) => {
+    const id = req.params.id;
+    const recipeID = req.params.recipeID;
+    const recipeRef = firestore.collection('users').doc(id).collection('customRecipes').doc(recipeID);
+    const data = req.body
+
+    try {
+        await recipeRef.update(data);
+        res.status(200).send("Successfully updated:" + recipeID);
+    } catch (error) {
+        res.status(500).send("Error occurred while trying to update the document");
+    }
 })
 
 module.exports = router
