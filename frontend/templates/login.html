@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% if uid %}
-
-{% else %}
-<div class="loginContainer" style="display: block; text-align: center;">
-   <div id="loginButton" style="color: #fff;">Login</div>
+{% if not uid %}
+<div class="loginContainer">
+    <h2 style="color: #fff; margin-bottom: 20px;">Login with Google to Continue:</h2>
+    <div id="loginButton">Login</div>
 </div>
 {% endif %}
 
