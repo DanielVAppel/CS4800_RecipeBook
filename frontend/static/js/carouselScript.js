@@ -12,11 +12,11 @@ const carouselConfig = {
 };
 
 // creates the "Check Recipe" element underneath selected recommended recipe
-const createItemText = (focusedItem) => {
+const createItemText = () => {
 	const itemText = createElWithClass("div", "itemText");
 
 	const anchor = createElWithClass("a");
-	anchor.href = focusedItem.dataset.source;
+	anchor.href = "#recipe";
 
 	const span = createElWithClass("span", "fontSubtitle");
 	span.textContent = "Check Recipe";
@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			attachCarouselEventListeners();
 			attachCarouselScrollListener();
 		}
-		if (hash.includes("user")) attachCarouselEventListeners();
+		// if (hash.includes("user")) attachCarouselEventListeners();
 	};
 
 	window.addEventListener("hashchange", handleHashChange);

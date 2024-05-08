@@ -18,15 +18,7 @@ const firebaseAuth = getAuth(firebaseApp);
 firebaseAuth.languageCode = "en";
 
 document.addEventListener("DOMContentLoaded", function () {
-	var carouselItems = document.querySelectorAll(".carouselItem"),
-		heroImage = document.getElementById("heroImage"),
-		heroTextWrapper = document.getElementById("heroTextWrapper"),
-		heroTitle = document.querySelector(".heroTitle"),
-		subsectionServings = document.querySelector(".heroSubsection > .fontSubtitle"),
-		// ready in minutes (RIM)
-		subsectionRIM = document.querySelector(".heroSubsection > .hollowBox > .fontSubtitle"),
-		heroSubtitle = document.querySelector(".heroSubtitle > .fontSubtitle"),
-		heroDescription = document.querySelector(".heroDescription");
+	var carouselItems = document.querySelectorAll(".carouselItem");
 
 	const updateUserPage = (url, options = {}) => {
 		// route can be anything, you just have to make one in flask
@@ -34,8 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		fetch(url, options)
 			.then((response) => response.text())
 			.then((data) => {
-				console.log(data);
-
 				const mainContainer = document.querySelector(".mainContainer");
 
 				const tempContainer = document.createElement("div");
@@ -63,14 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	const attachCarouselEventListeners = () => {
 		// re-initialize variables that were previously removed
 		carouselItems = document.querySelectorAll(".carouselItem");
-		heroImage = document.getElementById("heroImage");
-		heroTextWrapper = document.getElementById("heroTextWrapper");
-		heroTitle = document.querySelector(".heroTitle");
-		subsectionServings = document.querySelector(".heroSubsection > .fontSubtitle");
-		// ready in minutes (RIM)
-		subsectionRIM = document.querySelector(".heroSubsection > .hollowBox > .fontSubtitle");
-		heroSubtitle = document.querySelector(".heroSubtitle > .fontSubtitle");
-		heroDescription = document.querySelector(".heroDescription");
 
 		for (let i = 0; i < carouselItems.length; i++) {
 			const item = carouselItems[i];
@@ -94,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 	// handles user's first click on recipe in carousel
-	const focusItem = (focusedItem, recipeOfTheDay) => {
+	const focusItem = (focusedItem) => {
 		// ensures only one carousel recipe is selected at a time
 		carouselItems.forEach((item) => {
 			removeClass(item, "selectedItem");
@@ -105,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			anchor.removeEventListener("click", anchorEventHandler);
 		});
 
-		const itemText = createItemText(focusedItem);
+		const itemText = createItemText();
 
 		addClass(focusedItem, "selectedItem");
 		// adds the "Check Recipe" element to selected recipe
@@ -113,37 +95,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		const anchor = focusedItem.querySelector('a[data-type="showRecipe"]');
 		attachSingleAnchorListener(anchor);
-
-		/**
-		 * This part is the transition handler between carousel recipe selections.
-		 *
-		 * Timings:
-		 * hero elements have opacity transition times of 400ms (itemFocus + heroDelay)
-		 *
-		 * To avoid abrupt changes to text, we "hide" the hero element and then make the appropriate
-		 * changes. Then, we "show" the updated hero element based on the selected recipe.
-		 */
-		heroTextWrapper.style.opacity = 0;
-		heroImage.style.opacity = 0;
-
-		setTimeout(() => {
-			const { id, title, image, servings, cookingtime, description, cuisines } = focusedItem.dataset;
-
-			heroImage.style.opacity = 1;
-			heroImage.style.backgroundImage = `url("${image}")`;
-
-			// change hero text/image according to focused item
-			heroTitle.textContent = title;
-			subsectionServings.textContent = `${servings} Serving${servings > 1 ? "s" : ""}`;
-			subsectionRIM.textContent = reduceMinutes(cookingtime);
-			heroSubtitle.textContent = recipeOfTheDay ? "Recipe of the Day" : "Recommended Recipe";
-			heroDescription.textContent = description;
-		}, itemFocus + heroDelay);
-
-		// nicer transition when text loads in delayed
-		setTimeout(() => {
-			heroTextWrapper.style.opacity = 1;
-		}, itemFocus + heroDelay * 5);
 	};
 
 	// or however you want to grab the button element
@@ -151,6 +102,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		// temporary solution :D
 		setTimeout(() => {
 			const loginButton = document.getElementById("loginButton");
+
+			if (!loginButton) return;
 
 			// functionality for logging user in when button is clicked
 			loginButton.addEventListener("click", function (event) {
@@ -176,7 +129,13 @@ document.addEventListener("DOMContentLoaded", function () {
 		const { hash } = window.location;
 
 		if (hash.includes("user") || hash.includes("create")) attachLoginEventListener();
-		if (hash.includes("user")) attachCarouselEventListeners();
+		if (hash.includes("user")) {
+			setTimeout(() => {
+				attachCarouselEventListeners();
+				focusItem(carouselItems[0]);
+			}, 1000);
+			
+		}
 	};
 
 	window.addEventListener("hashchange", handleHashChange);
