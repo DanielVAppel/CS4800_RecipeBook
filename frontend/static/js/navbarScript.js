@@ -14,59 +14,37 @@ const navigationIndex = {
 	"#user": 3,
 };
 
-document.addEventListener("DOMContentLoaded", function () {
+/**
+ * Ensure all contents inside mainContainer are loaded and configured properly. Elements
+ * are removed and re-added when visiting different pages so event listeners have to be
+ * re-added (examples in carouselScript.js and recipeSearchScript.js).
+ *
+ * ALL CONTENT MUST BE PLACED INSIDE div.mainContainer.
+ * Check how base.html and home.html are configured.
+ */
+const handlePageChange = (path, callback = function () {}) => {
 	const mainContainer = document.querySelector(".mainContainer");
 
-	const navbarItems = document.querySelectorAll(".navItem"),
-		navbarSelectionIndicator = document.getElementById("navSelectionIndicator");
+	fetch("/" + path)
+		.then((response) => response.text())
+		.then((data) => {
+			const tempContainer = document.createElement("div");
+			tempContainer.innerHTML = data;
 
-	// update placement of red navbar selection indicator
-	const updateSelectionIndicator = (index) => {
-		const { height, padding } = selectionIndicator;
-		navbarSelectionIndicator.style.transform = `translateY(calc(${index * height}px + ${padding}rem))`;
-	};
+			switch (path.replace("#", "").trim()) {
+				case "search":
+				case "recipe":
+					setDisplay(mainContainer, "block");
+					break;
+				case "home":
+					setDisplay(mainContainer, "grid");
 
-	// update selection indicator values based on window size
-	const handleResize = () => {
-		const navbarItem = navbarItems[0];
-		selectionIndicator.height = navbarItem.clientHeight;
-		selectionIndicator.padding = navbarItem.clientHeight >= 94 ? 1.5 : 1;
+					const heroTextWrapper = tempContainer.querySelector("#heroTextWrapper");
+					toggleOpacity(heroTextWrapper, 1);
 
-		updateSelectionIndicator(selectionIndicator.selectedItemIndex);
-	};
-
-	// override default function to properly resize navigation
-	// tab components when window size changes
-	window.onresize = handleResize;
-
-	/**
-	 * Ensure all contents inside mainContainer are loaded and configured properly. Elements
-	 * are removed and re-added when visiting different pages so event listeners have to be
-	 * re-added (examples in carouselScript.js and recipeSearchScript.js).
-	 *
-	 * ALL CONTENT MUST BE PLACED INSIDE div.mainContainer.
-	 * Check how base.html and home.html are configured.
-	 */
-	const handlePageChange = (path) => {
-		fetch("/" + path)
-			.then((response) => response.text())
-			.then((data) => {
-				const tempContainer = document.createElement("div");
-				tempContainer.innerHTML = data;
-
-				switch (path.replace("#", "").trim()) {
-					case "search":
-						setDisplay(mainContainer, "block");
-						break;
-					case "home":
-						setDisplay(mainContainer, "grid");
-
-						const heroTextWrapper = tempContainer.querySelector("#heroTextWrapper");
-						toggleOpacity(heroTextWrapper, 1);
-
-						const carouselItems = tempContainer.querySelectorAll(".carouselItem"),
-							focusedItem = carouselItems[0];
-						const itemText = createItemText(focusedItem);
+					const carouselItems = tempContainer.querySelectorAll(".carouselItem"),
+						focusedItem = carouselItems[0];
+					const itemText = createItemText(focusedItem);
 
 						addClass(focusedItem, "selectedItem");
 						focusedItem.appendChild(itemText);
@@ -93,43 +71,68 @@ document.addEventListener("DOMContentLoaded", function () {
 						return;
 				}
 
-				const tempMainContainer = tempContainer.querySelector(".mainContainer");
+			const tempMainContainer = tempContainer.querySelector(".mainContainer");
 
-				while (mainContainer.firstChild && mainContainer.children.length > 0) {
-					mainContainer.removeChild(mainContainer.firstChild);
+			while (mainContainer.firstChild && mainContainer.children.length > 0) {
+				mainContainer.removeChild(mainContainer.firstChild);
+			}
+
+			tempMainContainer.childNodes.forEach((node) => {
+				if (node.nodeType !== Node.TEXT_NODE) {
+					mainContainer.appendChild(node);
 				}
-
-				tempMainContainer.childNodes.forEach((node) => {
-					if (node.nodeType !== Node.TEXT_NODE) {
-						mainContainer.appendChild(node);
-					}
-				});
 			});
-	};
+		})
+		.finally(callback);
+};
 
-	// this makes sure the correct page is loaded based on navigation tab selection
-	const handleHashChange = (path) => {
-		// path is given as #hash, removing it makes it easier to work with
-		path = path.replace("#", "").trim();
+// this makes sure the correct page is loaded based on navigation tab selection
+const handleHashChange = (path) => {
+	const mainContainer = document.querySelector(".mainContainer");
+	// path is given as #hash, removing it makes it easier to work with
+	path = path.replace("#", "").trim();
 
-		/**
-		 * For smooth fading transition between pages, we only replace the content inside
-		 * of mainContainer. we "hide" the mainContainer, then change the contents of the page
-		 * and afterwards change the hash/path and "show" the mainContainer.
-		 *
-		 * the timing is configured below with the two setTimeouts.
-		 */
-		toggleOpacity(mainContainer, 0);
+	/**
+	 * For smooth fading transition between pages, we only replace the content inside
+	 * of mainContainer. we "hide" the mainContainer, then change the contents of the page
+	 * and afterwards change the hash/path and "show" the mainContainer.
+	 *
+	 * the timing is configured below with the two setTimeouts.
+	 */
+	toggleOpacity(mainContainer, 0);
+
+	setTimeout(() => {
+		handlePageChange(path);
 
 		setTimeout(() => {
-			handlePageChange(path);
+			window.location.hash = path;
+			toggleOpacity(mainContainer, 1);
+		}, carouselConfig.timing.heroDelay);
+	}, carouselConfig.timing.itemFocus);
+};
 
-			setTimeout(() => {
-				window.location.hash = path;
-				toggleOpacity(mainContainer, 1);
-			}, carouselConfig.timing.heroDelay);
-		}, carouselConfig.timing.itemFocus);
+document.addEventListener("DOMContentLoaded", function () {
+	const navbarItems = document.querySelectorAll(".navItem"),
+		navbarSelectionIndicator = document.getElementById("navSelectionIndicator");
+
+	// update placement of red navbar selection indicator
+	const updateSelectionIndicator = (index) => {
+		const { height, padding } = selectionIndicator;
+		navbarSelectionIndicator.style.transform = `translateY(calc(${index * height}px + ${padding}rem))`;
 	};
+
+	// update selection indicator values based on window size
+	const handleResize = () => {
+		const navbarItem = navbarItems[0];
+		selectionIndicator.height = navbarItem.clientHeight;
+		selectionIndicator.padding = navbarItem.clientHeight >= 94 ? 1.5 : 1;
+
+		updateSelectionIndicator(selectionIndicator.selectedItemIndex);
+	};
+
+	// override default function to properly resize navigation
+	// tab components when window size changes
+	window.onresize = handleResize;
 
 	// ensures only one navigation tab is selected at a time
 	const focusItem = (focusedItem) => {

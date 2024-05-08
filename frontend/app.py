@@ -12,26 +12,27 @@ app = Flask(__name__)
 # navigation tab
 navItems = ["search", "home", "create", "user"]
 
-recommendedRecipes = []
+recipe_cache = {}
+recent_recipes = []
 uid = None
 
 @app.route("/")   
 @app.route("/home")
 def home_page():
     # recommended dishes/recipes
-    global recommendedRecipes
-    if len(recommendedRecipes) == 0:
-        recommendedRecipes = generate_random_recipes()
+    recommendedRecipes = generate_random_recipes()
     
     if len(recommendedRecipes) == 0:
         raise ValueError("No recipes returned by Spoonacular API")
-
+    
     return render_template("home.html", navItems=navItems, recommendedRecipes=recommendedRecipes)
 
 
 @app.route("/search")
 def search_page():
-    return render_template("search.html", navItems=navItems, resultItems=[])
+    filterItems = ['Vegetarian', 'Vegan', 'Gluten-Free', 'Appetizer', 'Main Course', 'Dessert']
+    
+    return render_template("search.html", navItems=navItems, searchFilters=filterItems, resultItems=[])
 
 
 @app.route("/create")
@@ -39,56 +40,39 @@ def create_page():
     return render_template("create.html", navItems=navItems, uid=uid)
 
 @app.route("/user")
-def favorites_page():
+def user_page():
+    # gets all of user's created recipes
+    createdRecipes = []
+    createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipe')
+    createdRecipes = createdRecipes.json()
+
     # recommended dishes/recipes
-    global recommendedRecipes
-    favoriteRecipes = recommendedRecipes if len(recommendedRecipes) > 0 else generate_random_recipes()
-    
-    return render_template("favorites.html", navItems=navItems, favoriteRecipes=favoriteRecipes, uid=uid)
+    favoriteRecipes = generate_random_recipes()
 
-
-@app.route("/signUserIn", methods=["POST"])
-def userLoggedIn():
-  # you could add smth that will get the query for which html page to render
-  userInfo = request.json
-  if userInfo != None:
-    print(userInfo)
-    
-    global uid
-    uid = userInfo['uid']
-    photoURL = userInfo['photoURL']
-    displayName = userInfo['displayName']
-    
-    response = requests.get(f'http://localhost:3000/users/{uid}')
-    
-    if response.status_code == 404:
-        body = {
-            'displayName': displayName,
-            'photo': photoURL,
-            'userUID': uid,
-            # other data
-        }
-        response = requests.post(f'http://localhost:3000/users/{uid}', json=body)
-    else:
-        # userID, displayName, etc
-        response = response.json()
-    
-    return render_template("favorites.html", navItems=navItems, favoriteRecipes=[], uid=uid)
-
+    return render_template("favorites.html", navItems=navItems, favoriteRecipes=favoriteRecipes)
 
 # HELPER FUNCTIONS/ROUTES
 # 
 # RB = recipe book
+@app.route("/show_recipe")
+def RB_show_recipe():
+    recipe_id = request.args.get('id')
+    
+    recipeItem = search_recipe_by_id(recipe_id)
+    
+    return render_template("recipe.html", recipeItem=recipeItem)
+
 # search function for when user is searching for recipes (search page)
 @app.route("/search_recipe")
 def RB_search_recipe():
     query = request.args.get('query')
+    filter = request.args.get('filter')
     
     # find all recipes that fit query
     # returns { offset, results: [{ id, title, image (unusable) }] }
     # 
     # https://spoonacular.com/food-api/docs#Search-Recipes-Complex
-    found_recipes = search_recipe_by_query(query=query)
+    found_recipes = search_recipe_by_query(query=query, filter=filter)
     
     if len(found_recipes) == 0:
         raise ValueError("No recipes returned by Spoonacular API")
@@ -109,7 +93,10 @@ def RB_search_recipe():
         # check if recipe data is retrieved from Spoonacular API
         if recipe_information != None:
             recipes_detailed.append(recipe_information)
-        
+            
+            global recipe_cache
+            recipe_cache[id] = recipe_information
+
     if len(recipes_detailed) == 0:
         raise ValueError("Unable to retrieve recipes by id using Spoonacular API")
     
@@ -119,10 +106,14 @@ def RB_search_recipe():
 
 # generate home page "Recipe of the Day / Recommended Recipes"
 def generate_random_recipes():
+    global recent_recipes
+    if len(recent_recipes) > 0:
+        return recent_recipes
+    
     url = 'https://api.spoonacular.com/recipes/random'
     params = {
         'apiKey': os.getenv("SPOONACULAR_API_KEY"),
-        'number': 10,
+        'number': 10
     }
 
     response = requests.get(url, params=params)
@@ -135,12 +126,16 @@ def generate_random_recipes():
         for recipe in data['recipes']:
             recipe['summary'] = re.sub(clean, '', recipe['summary'])
             
+            global recipe_cache
+            recipe_cache[recipe['id']] = recipe
+            
+        recent_recipes = data['recipes']
         return data['recipes']
     else:
         raise RuntimeError(response.content)
     
 
-def search_recipe_by_query(query, limit=5):
+def search_recipe_by_query(query, filter, limit=5):
     # /search returns { id, title, image (unusable), servings, RIM, sourceUrl }
     # /complexSearch returns { id, title, image }
     
@@ -150,6 +145,9 @@ def search_recipe_by_query(query, limit=5):
         'query': query,
         'number': limit
     }
+    
+    if filter is not None:
+        params['filter'] = filter
     
     response = requests.get(url, params=params)
     if response.status_code == 200:
@@ -162,7 +160,13 @@ def search_recipe_by_query(query, limit=5):
     return []
 
 
-def search_recipe_by_id(id): 
+def search_recipe_by_id(id):
+    id = int(id)
+    
+    global recipe_cache
+    if id in recipe_cache:
+        return recipe_cache[id]
+    
     url = f'https://api.spoonacular.com/recipes/{id}/information'
     params = {
         'apiKey': os.getenv("SPOONACULAR_API_KEY")
@@ -171,10 +175,17 @@ def search_recipe_by_id(id):
     response = requests.get(url, params=params)
     if response.status_code == 200:
         data = response.json()
+        
+        clean = re.compile('<.*?>')
+        
+        data['summary'] = re.sub(clean, '', data['summary'])
+        
+        recipe_cache[data['id']] = data
 
         return data
     return None
-        
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

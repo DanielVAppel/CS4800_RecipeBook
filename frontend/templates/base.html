@@ -7,6 +7,7 @@
 		{% block styles %}
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/indexStyles.css') }}" />
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fontStyles.css') }}" />
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}" />
 		{% endblock %}
 	</head>
 	<body>
@@ -29,8 +30,11 @@
 		<script src="../static/js/carouselScript.js"></script>
 		<script src="../static/js/navbarScript.js"></script>
 		<script src="../static/js/recipeSearchScript.js"></script>
-
+        <script src="../static/js/anchorScript.js"></script>
+		
 		<script type="module" src="../static/js/loginScript.js"></script>
+		<script type="module" src="../static/js/createScript.js"></script>
 		{% endblock %}
+        
 	</body>
 </html>
