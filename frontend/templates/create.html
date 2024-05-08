@@ -3,50 +3,52 @@
 {% block content %}
 
 {% if uid %}
-<div class="header">
-	<h1>Recipe Creation</h1>
-</div>
-
-<div class="row">
-	<div class="column left">
-		<label for="recipeName" style="color: #ffffff">Recipe Name</label>
-		<br /><br />
-
-		<label for="recipeServings" style="color: #ffffff">Servings</label>
-		<br /><br />
-
-		<label for="recipeTime" style="color: #ffffff">Cook Time</label>
-		<br /><br />
-
-		<label for="recipeIngredients" style="color: #ffffff">Ingredients</label>
-		<br /><br /><br /><br /><br /><br />
-
-		<label for="recipeEquipment" style="color: #ffffff">Equipment</label>
-		<br /><br /><br /><br /><br /><br /><br />
-
-		<label for="recipeInstructions" style="color: #ffffff">Instructions</label>
-		<br /><br /><br /><br /><br />
+<div class="container">
+	<div class="header">
+		<h1>Recipe Creation</h1>
 	</div>
-	<div class="column right">
-		<input required type="text" id="recipeName" name="recipeName" placeholder="Name" style="width: 200px" />
-		<br /><br />
-
-		<input type="number" id="recipeServings" name="recipeServings" placeholder="Servings" style="width: 70px" />
-		<br /><br />
-
-		<input type="number" id="recipeTime" name="recipeTime" placeholder="Cook Time" style="width: 80px" />
-		<br /><br />
-
-		<textarea required name="recipeIngredients" id="recipeIngredients" placeholder="Ingredients" style="width: 120%; height: 100px"></textarea>
-		<br /><br />
-
-		<textarea name="recipeEquipment" id="recipeEquipment" placeholder="Equipment" style="width: 120%; height: 100px"></textarea>
-		<br /><br />
-
-		<textarea required name="recipeInstructions" id="recipeInstructions" placeholder="Instructions" style="width: 120%; height: 200px"></textarea>
-		<br /><br />
-
-		<button id="submitButton">Create Recipe</button>
+	
+	<div class="row">
+		<div class="column left">
+			<label for="recipeName" style="color: #ffffff">Recipe Name</label>
+			<br /><br />
+	
+			<label for="recipeServings" style="color: #ffffff">Servings</label>
+			<br /><br />
+	
+			<label for="recipeTime" style="color: #ffffff">Cook Time</label>
+			<br /><br />
+	
+			<label for="recipeIngredients" style="color: #ffffff">Ingredients</label>
+			<br /><br /><br /><br /><br /><br />
+	
+			<label for="recipeEquipment" style="color: #ffffff">Equipment</label>
+			<br /><br /><br /><br /><br /><br /><br />
+	
+			<label for="recipeInstructions" style="color: #ffffff">Instructions</label>
+			<br /><br /><br /><br /><br />
+		</div>
+		<div class="column right">
+			<input required type="text" id="recipeName" name="recipeName" placeholder="Name" style="width: 200px" />
+			<br /><br />
+	
+			<input type="number" id="recipeServings" name="recipeServings" placeholder="Servings" style="width: 70px" />
+			<br /><br />
+	
+			<input type="number" id="recipeTime" name="recipeTime" placeholder="Cook Time" style="width: 80px" />
+			<br /><br />
+	
+			<textarea required name="recipeIngredients" id="recipeIngredients" placeholder="Ingredients" style="width: 120%; height: 100px"></textarea>
+			<br /><br />
+	
+			<textarea name="recipeEquipment" id="recipeEquipment" placeholder="Equipment" style="width: 120%; height: 100px"></textarea>
+			<br /><br />
+	
+			<textarea required name="recipeInstructions" id="recipeInstructions" placeholder="Instructions" style="width: 120%; height: 200px"></textarea>
+			<br /><br />
+	
+			<button id="submitButton">Create Recipe</button>
+		</div>
 	</div>
 </div>
 {% else %}

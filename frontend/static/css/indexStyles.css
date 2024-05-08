@@ -74,11 +74,18 @@ ul {
 	background: linear-gradient(transparent, var(--alto-30), transparent);
 }
 
-.logoWrapper {
+.logoContainer {
 	position: absolute;
 	top: 0;
 	left: 0;
+
+	width: 100%;
 	color: white;
+}
+
+.logoWrapper {
+	padding-block: 2rem;
+	display: flex;
 }
 
 .navList {
@@ -949,6 +956,13 @@ ul {
 	}
 }
 
+.container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
+}
+
 .column {
     padding-top: 20px;
     padding-left: 20px;
@@ -968,9 +982,7 @@ ul {
     height: clamp(500px, 100%, 100vh);
   }
   .header {
-	max-height: 20%;
-    padding-top: 60px;
-    padding-bottom: 30px;
+	height: clamp(50px, 20vh, 100px);
     text-align: center;
     color: white;
     font-size: 30px;
@@ -981,6 +993,6 @@ ul {
   }
 
   .row {
-	height: calc(100% - 20%);
+	height: 100%;
 	overflow: hidden;
   }
