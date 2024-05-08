@@ -83,6 +83,7 @@ def userLoggedIn():
         createdRecipes = []
         createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipe')
         createdRecipes = createdRecipes.json()
+        print(createdRecipes)
         return render_template(f"{query}.html", navItems=navItems, favoriteRecipes=recommendedRecipes, createdRecipes=createdRecipes, uid=uid)
 
 @app.route("/createRecipe", methods=["POST"])
