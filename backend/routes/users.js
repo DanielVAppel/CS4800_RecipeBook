@@ -168,6 +168,7 @@ router.get('/:id/customRecipe/', async (req,res) => {
     querySnapshot.forEach((doc) => {
         console.log(doc.id)
         recipes.push({
+            fileURL: doc.get("fileURL"),
             name: doc.get("name"),
             servings: doc.get("servings"),
             cookTime: doc.get("cookTime"),
