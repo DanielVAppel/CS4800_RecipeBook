@@ -396,3 +396,35 @@ ul {
 		height: clamp(500px, 70%, 1000px);
 	}
 }
+
+
+/*Start of CREATE RECIPE STYLES*/
+.column {
+	padding-top: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
+	float: left;
+  }
+  
+  .left {
+	
+	width: 10%;
+	height: clamp(500px, 100%, 100vh);
+  }
+  
+  .right {
+	
+	width: 75%;
+	height: clamp(500px, 100%, 100vh);
+  }
+  .header {
+    padding-top: 60px;
+    padding-bottom: 30px;
+    text-align: center;
+    color: white;
+    font-size: 30px;
+	background: url('paper-texture.jpg');
+    background-color: rgba(255, 210, 178, 0.116);
+	background-size: cover;
+	display: block;
+  }

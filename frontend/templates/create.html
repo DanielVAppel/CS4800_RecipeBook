@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block styles %}
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/createStyles.css') }}" />
+{% endblock %}
+{% block content %}
+
+{% if uid %} <!-- if there is an account -->
+
+<div class="hero-image">
+   <div class="header">
+      <h1>Recipe Creation</h1>
+   </div>
+</div>
+
+<div class="row">
+   <div class="column left">
+      <label for="recipeName" style="color: #FFFFFF">Recipe Name</label>
+      <br><br>
+
+      <label for="recipeServings" style="color: #FFFFFF">Servings</label>
+      <br><br>
+
+      <label for="recipeTime" style="color: #FFFFFF">Cook Time</label>
+      <br><br>
+
+      <label for="recipeIngredients" style="color: #FFFFFF">Ingredients</label>
+      <br><br><br><br><br><br>
+
+      <label for="recipeEquipment" style="color: #FFFFFF">Equipment</label>
+      <br><br><br><br><br><br><br>
+
+      <label for="recipeInstructions" style="color: #FFFFFF">Instructions</label>
+      <br><br><br><br><br>
+
+   </div>
+   <div class="column right">
+      <input required type="text"
+       id="recipeName" 
+       name="recipeName" 
+       placeholder="Name"
+       style = "width: 200px">
+      <br><br>
+
+      <input type="number" 
+      id="recipeServings" 
+      name="recipeServings" 
+      placeholder="Servings"
+      style = "width: 70px">
+      <br><br>
+
+      <input type="number" 
+      id="recipeTime" 
+      name="recipeTime" 
+      placeholder="Cook Time"
+      style = "width: 80px">
+      <br><br>
+
+      <textarea required name="recipeIngredients" 
+      id="recipeIngredients" 
+      placeholder="Ingredients" 
+      style=" width: 120%; height: 100px;"></textarea>
+      <br><br>
+
+      <textarea name="recipeEquipment" 
+      id="recipeEquipment" 
+      placeholder="Equipment" 
+      style="width: 120%; height: 100px;"></textarea>
+      <br><br>
+
+      <textarea required name="recipeInstructions" 
+      id="recipeInstructions" 
+      placeholder="Instructions" 
+      style="width: 120%; height: 200px;"></textarea>
+      <br><br>
+      
+      <button id="submitButton">Create Recipe</button>
+   </div>
+ </div>
+
+
+
+{% else %} <!-- Prompt user to log in -->
+<div class="loginContainer" style="display: block; text-align: center;">
+   <div id="loginButton" style="color: #fff;">Login</div>
+</div>
+{% endif %}
+
+{% endblock %}
