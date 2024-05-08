@@ -1,6 +1,7 @@
 
 .loginContainer {
     display: flex;
+    flex-direction: column; /* This ensures vertical stacking of h2 and button */
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -10,7 +11,7 @@
 #loginButton {
     display: inline-block;
     padding: 10px 20px;
-    font-size: 20px; /* Larger font size */
+    font-size: 40px; /* Larger font size */
     background-color: #4285F4; /* Google blue color, adjust if needed */
     color: white;
     border: none;
