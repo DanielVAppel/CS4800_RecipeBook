@@ -120,8 +120,8 @@ router.post('/:id/customRecipe', async (req,res) => {
     
 })
 
-//Get all createdRecipe documents, EXAMPLE URL: http://localhost:3000/users/KbKURAhryoOJOYfrMx4jlVYg96j2/customRecipes
-router.get('/:id/customRecipes', async (req,res) => {
+//Get all createdRecipe documents, EXAMPLE URL: http://localhost:3000/users/KbKURAhryoOJOYfrMx4jlVYg96j2/customRecipe
+router.get('/:id/customRecipe', async (req,res) => {
     const id = req.params.id;
     const createdRecipes = [];
 
