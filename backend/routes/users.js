@@ -120,4 +120,27 @@ router.post('/:id/customRecipe', async (req,res) => {
     
 })
 
+//Get all createdRecipe documents, EXAMPLE URL: http://localhost:3000/users/KbKURAhryoOJOYfrMx4jlVYg96j2/customRecipes
+router.get('/:id/customRecipes', async (req,res) => {
+    const id = req.params.id;
+    const createdRecipes = [];
+
+    const querySnapshot = await firestore.collection('users').doc(id).collection('customRecipes').get();
+    querySnapshot.forEach((doc) => {
+        console.log(doc.id)
+        //Return userID(same as doc name), dislayName, photoURL, and created recipes,
+        createdRecipes.push({
+            createdRecipeId: doc.id,
+            createdRecipeName: doc.get("recipeName"), 
+            createdRecipeServings:doc.get("recipeServings"), 
+            createdRecipeTime:doc.get("recipeTime"),
+            createdRecipeIngredients:doc.get("recipeIngredients"),  
+            createdRecipeEquipment:doc.get("recipeEquipment"),
+            createdRecipeInstructions:doc.get("recipeInstructions"),  
+        }) 
+    })
+
+    res.status(200).send(createdRecipes);
+})
+
 module.exports = router

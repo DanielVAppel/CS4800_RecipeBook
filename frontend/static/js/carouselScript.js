@@ -177,6 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			attachCarouselEventListeners();
 			attachCarouselScrollListener();
 		}
+		if (hash.includes("user")) attachCarouselEventListeners();
 	};
 
 	window.addEventListener("hashchange", handleHashChange);

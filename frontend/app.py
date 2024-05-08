@@ -40,7 +40,7 @@ def create_page():
     return render_template("create.html", navItems=navItems, uid=uid)
 
 @app.route("/user")
-def favorites_page():
+def user_page():
     # gets all of user's created recipes
     createdRecipes = []
     createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipe')
