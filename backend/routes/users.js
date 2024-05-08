@@ -117,7 +117,6 @@ router.post('/:id/customRecipe', async (req,res) => {
     } catch (error) {
         res.status(500).send("Error occurred while trying to create recipe");
     }
-    
 })
 
 //Get all createdRecipe documents, EXAMPLE URL: http://localhost:3000/users/KbKURAhryoOJOYfrMx4jlVYg96j2/customRecipes
@@ -141,6 +140,44 @@ router.get('/:id/customRecipes', async (req,res) => {
     })
 
     res.status(200).send(createdRecipes);
+})
+
+router.get("/:id/favoriteRecipeList", async (req, res) => {
+    const {id} = req.params;
+    const docRef = await firestore.collection('users').doc(id).get();
+
+    try {
+        const recipeIdList = docRef.get("savedRecipes");
+        res.status(200).send({ recipeIdList });
+    } catch (e) {
+        res.status(404).send("Favorited recipe not found")
+    }
+});
+
+router.post("/:id/favoriteRecipe", async (req, res) => {
+    try {
+    const {params: {id}, body} = req;
+    console.log(id, body, body.recipeId);
+    const docRef = firestore.collection('users').doc(id);
+    const docSnapshot = await docRef.get();
+
+    if (!docSnapshot.exists) {
+        console.log("DNE");
+        res.status(404).send("DNE");
+    }
+    
+        var data = docSnapshot.data();
+        var recipeIdList = data['savedRecipes'] || [];
+        recipeIdList.push(body.recipeId);
+
+        data['savedRecipes'] = recipeIdList;
+
+        await docRef.set(data);
+
+        res.status(200);
+    } catch (error) {
+        res.status(500).send("Error favoriting recipe");
+    }
 })
 
 module.exports = router
