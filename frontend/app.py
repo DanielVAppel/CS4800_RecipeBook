@@ -14,6 +14,8 @@ navItems = ["search", "home", "create", "user"]
 
 recipe_cache = {}
 recent_recipes = []
+recipe_cache = {}
+recent_recipes = []
 uid = None
 
 @app.route("/")   
@@ -33,6 +35,9 @@ def search_page():
     filterItems = ['Vegetarian', 'Vegan', 'Gluten-Free', 'Appetizer', 'Main Course', 'Dessert']
     
     return render_template("search.html", navItems=navItems, searchFilters=filterItems, resultItems=[])
+    filterItems = ['Vegetarian', 'Vegan', 'Gluten-Free', 'Appetizer', 'Main Course', 'Dessert']
+    
+    return render_template("search.html", navItems=navItems, searchFilters=filterItems, resultItems=[])
 
 
 @app.route("/create")
@@ -43,13 +48,101 @@ def create_page():
 def user_page():
     # gets all of user's created recipes
     createdRecipes = []
-    createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipe')
+    global uid
+    createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipes')
     createdRecipes = createdRecipes.json()
 
     # recommended dishes/recipes
-    favoriteRecipes = generate_random_recipes()
+    recipeIdList = requests.get(f'http://localhost:3000/users/{uid}/favoriteRecipeList')
+    recipeIdList = recipeIdList.json()
+    
+    favoriteRecipes = []
+    if len(recipeIdList) != 0:
+        for id in recipeIdList['recipeIdList']:
+            favoriteRecipes.append(search_recipe_by_id(id))
 
-    return render_template("favorites.html", navItems=navItems, favoriteRecipes=favoriteRecipes)
+    return render_template("user.html", navItems=navItems, favoriteRecipes=favoriteRecipes, createdRecipes=createdRecipes, uid=uid)
+
+
+@app.route("/signUserIn", methods=["POST"])
+def userLoggedIn():
+    query = request.args.get('fileName')
+  # you could add smth that will get the query for which html page to render
+    userInfo = request.json
+    if userInfo != None:
+        global uid
+        uid = userInfo['uid']
+        photoURL = userInfo['photoURL']
+        displayName = userInfo['displayName']
+
+        response = requests.get(f'http://localhost:3000/users/{uid}')
+
+        if response.status_code == 404:
+            body = {
+                'displayName': displayName,
+                'photo': photoURL,
+                'userUID': uid,
+                'savedRecipes': []
+                # other data
+            }
+            response = requests.post(f'http://localhost:3000/users/{uid}', json=body)
+        else:
+            # userID, displayName, etc
+            response = response.json()
+
+        # gets all of user's created recipes
+        createdRecipes = []
+        createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipes')
+        createdRecipes = createdRecipes.json()
+        
+        recipeIdList = requests.get(f'http://localhost:3000/users/{uid}/favoriteRecipeList')
+        recipeIdList = recipeIdList.json()
+    
+        favoriteRecipes = []
+        if len(recipeIdList) != 0:
+            for id in recipeIdList['recipeIdList']:
+                favoriteRecipes.append(search_recipe_by_id(id))
+                
+        return render_template(f"{query}.html", navItems=navItems, favoriteRecipes=favoriteRecipes, createdRecipes=createdRecipes, uid=uid)
+
+@app.route("/createRecipe", methods=["POST"])
+def createRecipePost():
+  # you could add smth that will get the query for which html page to render
+  recipeInfo = request.json
+  global uid
+  if uid != None:
+    name = recipeInfo['name']
+    servings = recipeInfo['servings']
+    time = recipeInfo['time']
+    ingredients = recipeInfo['ingredients']
+    equipment = recipeInfo['equipment']
+    instructions = recipeInfo['instructions']
+    
+    body = {
+        'recipeName': name,
+        'recipeServings': servings,
+        'recipeTime': time,
+        'recipeIngredients': ingredients,
+        'recipeEquipment': equipment,
+        'recipeInstructions': instructions
+        # other data
+    }
+    response = requests.post(f'http://localhost:3000/users/{uid}/customRecipe', json=body)
+    
+    return render_template("create.html", navItems=navItems, uid=uid)
+
+
+@app.route("/favoriteRecipe", methods=["POST"])
+def favoriteRecipe():
+    recipeInfo = request.json
+    
+    if uid != None:
+        body = {
+            'recipeId': recipeInfo['id']
+        }
+        
+        response = requests.post(f'http://localhost:3000/users/{uid}/favoriteRecipe', json=body)
+
 
 # HELPER FUNCTIONS/ROUTES
 # 

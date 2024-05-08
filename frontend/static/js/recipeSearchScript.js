@@ -19,6 +19,18 @@ document.addEventListener("DOMContentLoaded", function () {
 	// set dynamic properties (transition timings)
 	root.style.setProperty("--input-focus", `${searchConfig.timing.inputFocus}ms`);
 
+	const handleFavoriteRecipe = (id) => {
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id }),
+        };
+
+        fetch("/favoriteRecipe", options);
+    };
+
 	// handle the query search and page updates
 	const handleInputSearch = ({ query, filter }) => {
 		const resultList = document.querySelector(".resultList");
@@ -54,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
 						itemFavorite.addEventListener("click", function (event) {
 							itemFavorite.src = `/static/images/svg/${itemFavorite.src.endsWith("star.svg") ? "star_favorite" : "star"}.svg`;
 							console.log(`Favorited Recipe: ${title} | ID: ${id}`);
+							handleFavoriteRecipe(id);
 						});
 
 						// humanize the readyInMinutes data
