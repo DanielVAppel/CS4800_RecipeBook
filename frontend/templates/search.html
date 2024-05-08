@@ -28,7 +28,7 @@
                 data-title="{{ item.title }}"
 				data-cookingtime="{{ item.readyInMinutes }}"
 			>
-				<a href="{{ item.spoonacularSourceUrl }}" class="itemImageWrapper">
+				<a href="#recipe" data-type="showRecipe" data-id="{{ item.id }}" class="itemImageWrapper">
 					<div class="itemImage">
 						<img src="{{ item.image }}" alt="{{ item.title }}" />
 					</div>
@@ -36,7 +36,7 @@
 				<div class="itemTextWrapper">
 					<div class="itemDetailsContainer">
 						<div class="itemNameContainer">
-							<a href="{{ item.spoonacularSourceUrl }}" class="itemNameWrapper">
+							<a href="#recipe" data-type="showRecipe" data-id="{{ item.id }}" class="itemNameWrapper">
 								<span class="fontTitle fontWhite">{{ item.title }}</span>
 							</a>
 							<div class="itemFavoriteWrapper">

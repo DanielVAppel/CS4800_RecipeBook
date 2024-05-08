@@ -64,6 +64,8 @@ document.addEventListener("DOMContentLoaded", function () {
 						resultList.appendChild(node);
 					}
 				});
+
+				attachAnchorListeners();
 			});
 	};
 
