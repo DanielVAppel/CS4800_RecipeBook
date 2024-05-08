@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				tempContainer.innerHTML = data;
 
 				const tempMainContainer = tempContainer.querySelector(".mainContainer");
+				if (window.location.hash.includes("user")) setDisplay(mainContainer, "grid");
 
 				while (mainContainer.firstChild && mainContainer.children.length > 0) {
 					mainContainer.removeChild(mainContainer.firstChild);
