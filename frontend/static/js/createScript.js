@@ -24,8 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   mainContainer.appendChild(node);
                }
             });
-         })
-         .finally(attachCreateEventListener);
+         });
    };
 
 	const attachCreateEventListener = () => {
@@ -61,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
          updateCreatePage("/createRecipe", options);
          alert("Recipe Created");
-         attachCreateEventListener();
 		});
 	};
 

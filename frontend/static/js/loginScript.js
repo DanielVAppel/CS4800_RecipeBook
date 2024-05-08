@@ -42,8 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 						mainContainer.appendChild(node);
 					}
 				});
-			})
-			.finally(attachLoginEventListener);
+			});
 	};
 
 	// or however you want to grab the button element
