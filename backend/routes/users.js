@@ -4,14 +4,23 @@
 const express = require('express')
 const firebase_admin = require('firebase-admin') 
 const router = express.Router()
-
+const multer = require('multer')
 
 const serviceAccount = require("../key.json")
 const admin = firebase_admin.initializeApp({
-    credential: firebase_admin.credential.cert(serviceAccount)
+    credential: firebase_admin.credential.cert(serviceAccount),
+    storageBucket: 'recipe-cookbook-ada79.appspot.com'
 })
 
 const firestore = admin.firestore();
+const bucket = admin.storage().bucket();
+
+const upload = multer({
+    storage: multer.memoryStorage(), // Store file in memory
+    limits: {
+        fileSize: 5 * 1024 * 1024, // Limit file size to 5MB
+    },
+});
 
 //Get all user documents, EXAMPLE URL: http://localhost:3000/users/
 router.get('/', async (req,res) => {
@@ -23,7 +32,7 @@ router.get('/', async (req,res) => {
         //Return userID(same as doc name), dislayName, photoURL, and created recipes,
         users.push({userID: doc.get("userUID"), 
         displayName:doc.get("displayName"), 
-        photoURL: doc.get("photo"), 
+        photoURL: doc.get("photo"),
         }) 
     })
 
@@ -106,18 +115,47 @@ router.delete('/:id', async (req,res) => {
 
 //Create a custom recipe, will add a subcollection to docRef titled "customRecipes"
 //EXAMPLE URL: http://localhost:3000/users/KbKURAhryoOJOYfrMx4jlVYg96j2/customRecipe
-router.post('/:id/customRecipe', async (req,res) => {
+router.post('/:id/customRecipe', upload.single('file'),async (req,res) => {
     const id = req.params.id;
     const colRef = firestore.collection('users').doc(id).collection('customRecipes');
     const data = req.body;
+    const file = req.file;
 
     try {
-        await colRef.add(data);
-        res.status(200).send("Successfully created recipe");
+        // Check if file exists in the request
+        if (!file) {
+            return res.status(400).send('No file uploaded.');
+        }
+
+        // Upload the file to Firebase Storage
+        const blob = bucket.file(file.originalname);
+        const blobStream = blob.createWriteStream({
+            metadata: {
+                contentType: file.mimetype,
+            },
+        });
+
+        blobStream.on('error', (err) => {
+            console.log(err)
+            res.status(500).send('Error uploading file to Firebase Storage.');
+        });
+
+        blobStream.on('finish', async () => {
+            // Once the file is uploaded, add fileURL to data and store in Firestore
+            data.fileURL = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+
+            try {
+                await colRef.add(data);
+                res.status(200).send("Successfully created recipe.");
+            } catch (error) {
+                res.status(500).send("Error occurred while trying to create recipe in Firestore.");
+            }
+        });
+
+        blobStream.end(file.buffer); // Write file buffer to storage
     } catch (error) {
-        res.status(500).send("Error occurred while trying to create recipe");
+        res.status(500).send("Error occurred while processing file upload.");
     }
-    
 })
 
 //Get all custom recipes of user
@@ -162,7 +200,7 @@ router.get('/:id/customRecipe/:recipeID', async (req,res) => {
 })
 
 //Update a custom recipe 
-//EXAMPLE URL: http://localhost:3000/users/KbKURAhryoOJOYfrMx4jlVYg96j2/customRecipe/bruh
+//EXAMPLE URL: http://localhost:3000/users/KbKURAhryoOJOYfrMx4jlVYg96j2/customRecipe/
 router.put('/:id/customRecipe/:recipeID', async (req,res) => {
     const id = req.params.id;
     const recipeID = req.params.recipeID;
