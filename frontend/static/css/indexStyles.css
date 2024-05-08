@@ -74,6 +74,13 @@ ul {
 	background: linear-gradient(transparent, var(--alto-30), transparent);
 }
 
+.logoWrapper {
+	position: absolute;
+	top: 0;
+	left: 0;
+	color: white;
+}
+
 .navList {
 	position: relative;
 }
@@ -961,6 +968,7 @@ ul {
     height: clamp(500px, 100%, 100vh);
   }
   .header {
+	max-height: 20%;
     padding-top: 60px;
     padding-bottom: 30px;
     text-align: center;
@@ -970,4 +978,9 @@ ul {
     background-color: rgba(255, 210, 178, 0.116);
     background-size: cover;
     display: block;
+  }
+
+  .row {
+	height: calc(100% - 20%);
+	overflow: hidden;
   }
