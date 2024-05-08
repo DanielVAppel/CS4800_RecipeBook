@@ -33,7 +33,10 @@
 	</ul>
 </div>
 
-<div class="recipeCreatedContainer" style = "overflow-y: auto;">
+<div class="recipeCreatedContainer">
+	<div class="carouselCategory">
+		<span class="fontCategory fontWhite"> Created Recipes</span>
+	</div>
 	<ul class="recipeCreated">
 		{% for createdRecipe in createdRecipes %}
 		<li
@@ -46,16 +49,16 @@
 			data-createdRecipeEquipment="{{ createdRecipe.createdRecipeEquipment }}"
 			data-createdRecipeInstructions="{{ createdRecipe.createdRecipeInstructions }}"
 		>
+			<details>
+				<summary for="createdRecipeItem" class="createdRecipeItemLabel" style="color: #FFFFFF">{{ createdRecipe.createdRecipeName }}</summary>
+				<div class="createdRecipeName" style="color: #FFFFFF"> Recipe Name: {{ createdRecipe.createdRecipeName }}</div>
+				<div class="createdRecipeServings" style="color: #FFFFFF"> Recipe Servings: {{ createdRecipe.createdRecipeServings }}</div>
+				<div class="createdRecipeTime" style="color: #FFFFFF"> Recipe Time: {{ createdRecipe.createdRecipeTime }}</div>
+				<div class="createdRecipeIngredients" style="color: #FFFFFF"> Recipe Ingredients: {{ createdRecipe.createdRecipeIngredients }}</div>
+				<div class="createdRecipeEquipment" style="color: #FFFFFF"> Recipe Equipment: {{ createdRecipe.createdRecipeEquipment }}</div>
+				<div class="createdRecipeInstructions" style="color: #FFFFFF"> Recipe Instructions: {{ createdRecipe.createdRecipeInstructions }}</div>
+			</details>
 		</li>
-		<details>
-			<summary for="createdRecipeItem" class="createdRecipeItemLabel" style="color: #FFFFFF">{{ createdRecipe.createdRecipeName }}</summary>
-			<h3><div class="createdRecipeName" style="color: #FFFFFF"> Recipe Name: {{ createdRecipe.createdRecipeName }}</div></h3>
-			<h3><div class="createdRecipeServings" style="color: #FFFFFF"> Recipe Servings: {{ createdRecipe.createdRecipeServings }}</div></h3>
-			<h3><div class="createdRecipeTime" style="color: #FFFFFF"> Recipe Time: {{ createdRecipe.createdRecipeTime }}</div></h3>
-			<h3><div class="createdRecipeIngredients" style="color: #FFFFFF"> Recipe Ingredients: {{ createdRecipe.createdRecipeIngredients }}</div></h3>
-			<h3><div class="createdRecipeEquipment" style="color: #FFFFFF"> Recipe Equipment: {{ createdRecipe.createdRecipeEquipment }}</div></h3>
-			<h3><div class="createdRecipeInstructions" style="color: #FFFFFF"> Recipe Instructions: {{ createdRecipe.createdRecipeInstructions }}</div></h3>
-		</details>
 		{% endfor %}
 	</ul>
 </div>
