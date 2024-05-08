@@ -153,25 +153,30 @@ document.addEventListener("DOMContentLoaded", function () {
 		}, itemFocus + heroDelay * 5);
 	};
 
-	// handle user scroll in carousel (default scroll does not work)
-	const carousel = document.querySelector(".recipeCarousel");
-	carousel.addEventListener("mousewheel", function (event) {
-		event.preventDefault();
+	const attachCarouselScrollListener = () => {
+		// handle user scroll in carousel (default scroll does not work)
+		const carousel = document.querySelector(".recipeCarousel");
+		carousel.addEventListener("mousewheel", function (event) {
+			event.preventDefault();
 
-		const now = new Date().getTime(),
-			hasBeenLongEnough = calcElapsedTime(carouselConfig.lastScrollTimestamp, now) > carouselConfig.minimumTimeBetweenScrolls;
+			const now = new Date().getTime(),
+				hasBeenLongEnough = calcElapsedTime(carouselConfig.lastScrollTimestamp, now) > carouselConfig.minimumTimeBetweenScrolls;
 
-		// only allow user to scroll once per 600ms
-		if (hasBeenLongEnough) {
-			carousel.scrollLeft += (event.deltaY > 0 ? 1 : -1) * scrollSpeed;
-			carouselConfig.lastScrollTimestamp = now;
-		}
-	});
+			// only allow user to scroll once per 600ms
+			if (hasBeenLongEnough) {
+				carousel.scrollLeft += (event.deltaY > 0 ? 1 : -1) * scrollSpeed;
+				carouselConfig.lastScrollTimestamp = now;
+			}
+		});
+	};
 
 	const handleHashChange = () => {
 		const { hash } = window.location;
 
-		if (hash.includes("home")) attachCarouselEventListeners();
+		if (hash.includes("home")) {
+			attachCarouselEventListeners();
+			attachCarouselScrollListener();
+		}
 	};
 
 	window.addEventListener("hashchange", handleHashChange);
@@ -180,5 +185,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	(initScript = () => {
 		focusItem(carouselItems[0], true);
 		attachSingleAnchorListener(carouselItems[0].querySelector('a[data-type="showRecipe"]'));
+		attachCarouselScrollListener();
 	})();
 });
