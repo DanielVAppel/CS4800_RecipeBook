@@ -39,7 +39,7 @@ def create_page():
     return render_template("create.html", navItems=navItems, uid=uid)
 
 @app.route("/user")
-def favorites_page():
+def user_page():
     # gets all of user's created recipes
     createdRecipes = []
     createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipe')
@@ -48,41 +48,42 @@ def favorites_page():
     # recommended dishes/recipes
     global recommendedRecipes
     favoriteRecipes = recommendedRecipes if len(recommendedRecipes) > 0 else generate_random_recipes()
-    
-    return render_template("favorites.html", navItems=navItems, favoriteRecipes=favoriteRecipes, createdRecipes=createdRecipes, uid=uid)
+
+    return render_template("user.html", navItems=navItems, favoriteRecipes=favoriteRecipes, createdRecipes=createdRecipes, uid=uid)
 
 
 @app.route("/signUserIn", methods=["POST"])
 def userLoggedIn():
+    query = request.args.get('fileName')
   # you could add smth that will get the query for which html page to render
-  userInfo = request.json
-  if userInfo != None:
-    print(userInfo)
+    userInfo = request.json
+    if userInfo != None:
+        print(userInfo)
     
-    global uid
-    uid = userInfo['uid']
-    photoURL = userInfo['photoURL']
-    displayName = userInfo['displayName']
-    
-    response = requests.get(f'http://localhost:3000/users/{uid}')
-    
-    if response.status_code == 404:
-        body = {
-            'displayName': displayName,
-            'photo': photoURL,
-            'userUID': uid,
-            # other data
-        }
-        response = requests.post(f'http://localhost:3000/users/{uid}', json=body)
-    else:
-        # userID, displayName, etc
-        response = response.json()
-    
-    # gets all of user's created recipes
-    createdRecipes = []
-    createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipe')
-    createdRecipes = createdRecipes.json()
-    return render_template("favorites.html", navItems=navItems, favoriteRecipes=[], createdRecipes=createdRecipes, uid=uid)
+        global uid
+        uid = userInfo['uid']
+        photoURL = userInfo['photoURL']
+        displayName = userInfo['displayName']
+
+        response = requests.get(f'http://localhost:3000/users/{uid}')
+
+        if response.status_code == 404:
+            body = {
+                'displayName': displayName,
+                'photo': photoURL,
+                'userUID': uid,
+                # other data
+            }
+            response = requests.post(f'http://localhost:3000/users/{uid}', json=body)
+        else:
+            # userID, displayName, etc
+            response = response.json()
+
+        # gets all of user's created recipes
+        createdRecipes = []
+        createdRecipes = requests.get(f'http://localhost:3000/users/{uid}/customRecipe')
+        createdRecipes = createdRecipes.json()
+        return render_template(f"{query}.html", navItems=navItems, favoriteRecipes=recommendedRecipes, createdRecipes=createdRecipes, uid=uid)
 
 @app.route("/createRecipe", methods=["POST"])
 def createRecipePost():

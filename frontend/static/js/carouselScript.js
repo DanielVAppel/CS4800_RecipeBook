@@ -165,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		const { hash } = window.location;
 
 		if (hash.includes("home")) attachCarouselEventListeners();
+		if (hash.includes("user")) attachCarouselEventListeners();
 	};
 
 	window.addEventListener("hashchange", handleHashChange);
