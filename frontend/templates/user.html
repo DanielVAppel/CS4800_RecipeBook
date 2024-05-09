@@ -1,8 +1,4 @@
-{% extends "base.html" %}
-
-{% block content %}
-
-{% if uid %}
+{% extends "base.html" %} {% block content %} {% if uid %}
 <div class="recipeCarouselContainer">
 	<div class="carouselCategory">
 		<span class="fontCategory fontWhite"> Favorite Recipes</span>
@@ -33,7 +29,10 @@
 	</ul>
 </div>
 
-<div class="recipeCreatedContainer" style = "overflow-y: auto;">
+<div class="recipeCreatedContainer" style="overflow-y: auto">
+	<div class="carouselCategory">
+		<span class="fontCategory fontWhite"> Created Recipes</span>
+	</div>
 	<ul class="recipeCreated">
 		{% for createdRecipe in createdRecipes %}
 		<li
@@ -45,24 +44,32 @@
 			data-createdRecipeIngredients="{{ createdRecipe.createdRecipeIngredients }}"
 			data-createdRecipeEquipment="{{ createdRecipe.createdRecipeEquipment }}"
 			data-createdRecipeInstructions="{{ createdRecipe.createdRecipeInstructions }}"
-		>
-		</li>
+		></li>
 		<details>
-			<summary for="createdRecipeItem" class="createdRecipeItemLabel" style="color: #FFFFFF">{{ createdRecipe.createdRecipeName }}</summary>
-			<h3><div class="createdRecipeName" style="color: #FFFFFF"> Recipe Name: {{ createdRecipe.createdRecipeName }}</div></h3>
-			<h3><div class="createdRecipeServings" style="color: #FFFFFF"> Recipe Servings: {{ createdRecipe.createdRecipeServings }}</div></h3>
-			<h3><div class="createdRecipeTime" style="color: #FFFFFF"> Recipe Time: {{ createdRecipe.createdRecipeTime }}</div></h3>
-			<h3><div class="createdRecipeIngredients" style="color: #FFFFFF"> Recipe Ingredients: {{ createdRecipe.createdRecipeIngredients }}</div></h3>
-			<h3><div class="createdRecipeEquipment" style="color: #FFFFFF"> Recipe Equipment: {{ createdRecipe.createdRecipeEquipment }}</div></h3>
-			<h3><div class="createdRecipeInstructions" style="color: #FFFFFF"> Recipe Instructions: {{ createdRecipe.createdRecipeInstructions }}</div></h3>
+			<summary for="createdRecipeItem" class="createdRecipeItemLabel" style="color: #ffffff">{{ createdRecipe.createdRecipeName }}</summary>
+			<div class="createdRecipeName" style="color: #ffffff">Recipe Name: {{ createdRecipe.createdRecipeName }}</div>
+			<div class="createdRecipeServings" style="color: #ffffff">Recipe Servings: {{ createdRecipe.createdRecipeServings }}</div>
+			<div class="createdRecipeTime" style="color: #ffffff">Recipe Time: {{ createdRecipe.createdRecipeTime }}</div>
+			<div class="createdRecipeIngredients" style="color: #ffffff">Recipe Ingredients: {{ createdRecipe.createdRecipeIngredients }}</div>
+			<div class="createdRecipeEquipment" style="color: #ffffff">Recipe Equipment: {{ createdRecipe.createdRecipeEquipment }}</div>
+			<div class="createdRecipeInstructions" style="color: #ffffff">Recipe Instructions: {{ createdRecipe.createdRecipeInstructions }}</div>
 		</details>
 		{% endfor %}
 	</ul>
 </div>
 {% else %}
-<div class="loginContainer" style="display: block; text-align: center;">
-   <div id="loginButton" style="color: #fff;">Login</div>
+<div class="loginContainer">
+	<div class="logoContainer">
+		<div class="logoWrapper">
+			<div class="imageContainer">
+				<img class="logoImage" src="{{ url_for('static', filename='images/Reciply_LOGO-removebg-preview.png') }}" />
+			</div>
+		</div>
+	</div>
+	<div class="buttonContainer">
+		<div class="buttonWrapper">
+			<div class="loginButton" id="loginButton" style="color: #fff; font-size: 30px">Login</div>
+		</div>
+	</div>
 </div>
-{% endif %}
-
-{% endblock %}
+{% endif %} {% endblock %}

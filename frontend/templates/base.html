@@ -12,6 +12,13 @@
 	<body>
 		<div class="fullPageContainer">
 			<nav class="navContainer">
+				<div class="logoContainer">
+					<div class="logoWrapper">
+						<div class="imageContainer">
+							<img class="logoImage" src="{{ url_for('static', filename='images/Reciply_LOGO-removebg-preview.png') }}" />
+						</div>
+					</div>
+				</div>
 				<ul class="navList">
 					{% for item in navItems %}
 					<li class="navItem" data-tab="{{ item }}">
@@ -33,6 +40,6 @@
 		<script type="module" src="../static/js/loginScript.js"></script>
 		<script type="module" src="../static/js/createScript.js"></script>
 		{% endblock %}
-      <script src="../static/js/anchorScript.js"></script>
+		<script src="../static/js/anchorScript.js"></script>
 	</body>
 </html>

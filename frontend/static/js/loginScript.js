@@ -132,9 +132,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		if (hash.includes("user")) {
 			setTimeout(() => {
 				attachCarouselEventListeners();
-				focusItem(carouselItems[0]);
+				if (carouselItems.length > 0) focusItem(carouselItems[0]);
 			}, 1000);
-			
 		}
 	};
 

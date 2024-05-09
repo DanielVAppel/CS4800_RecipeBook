@@ -52,7 +52,18 @@
 	</div>
 </div>
 {% else %}
-<div class="loginContainer" style="display: block; text-align: center">
-	<div id="loginButton" style="color: #fff">Login</div>
+<div class="loginContainer">
+	<div class="logoContainer">
+		<div class="logoWrapper">
+			<div class="imageContainer">
+				<img class="logoImage" src="{{ url_for('static', filename='images/Reciply_LOGO-removebg-preview.png') }}" />
+			</div>
+		</div>
+	</div>
+	<div class="buttonContainer">
+		<div class="buttonWrapper">
+			<div class="loginButton" id="loginButton" style="color: #fff; font-size: 30px;">Login</div>
+		</div>
+	</div>
 </div>
 {% endif %} {% endblock %}
