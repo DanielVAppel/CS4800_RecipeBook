@@ -38,6 +38,7 @@ const handlePageChange = (path, callback = function () {}) => {
 					break;
 				case "home":
 					setDisplay(mainContainer, "grid");
+					mainContainer.style.gridTemplateRows = "2fr 1fr";
 
 					const heroTextWrapper = tempContainer.querySelector("#heroTextWrapper");
 					toggleOpacity(heroTextWrapper, 1);
