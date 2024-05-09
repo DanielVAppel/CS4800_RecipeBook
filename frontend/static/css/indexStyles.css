@@ -559,6 +559,23 @@ ul {
 	opacity: 0.8;
 }
 
+.recipeCreatedContainer {
+	height: 100%;
+	width: 100%;
+	padding-inline: 1.25rem;
+	overflow-x: auto;
+	overflow-y: auto;
+	white-space: nowrap;
+
+	user-select: none;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+
+	background-color: var(--mineshaft);
+
+	transition: opacity var(--hero-fade) var(--cbz);
+}
+
 .recipeSearchContainer {
 	height: clamp(500px, 100%, 100vh);
 	/* max-width: 900px; */
