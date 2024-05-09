@@ -299,6 +299,11 @@ ul {
 	background-image: linear-gradient(180deg, transparent, rgb(0 0 0 / 61%), var(--mineshaft));
 }
 
+.userContainer {
+	height: fit-content!important;
+	padding-block: 3rem;
+}
+
 .recipeCarouselContainer {
 	height: 100%;
 	width: 100%;
@@ -574,6 +579,23 @@ ul {
 	background-color: var(--mineshaft);
 
 	transition: opacity var(--hero-fade) var(--cbz);
+}
+
+.recipeCreated {
+	display: flex;
+	flex-direction: column;
+
+	width: 100%;
+	gap: 1rem;
+}
+
+.createdRecipeItem {
+	position: relative;
+	padding-block: 1rem;
+}
+
+.createdRecipeItem div {
+	margin-left: 2rem;
 }
 
 .recipeSearchContainer {

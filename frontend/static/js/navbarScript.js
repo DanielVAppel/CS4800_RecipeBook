@@ -56,6 +56,7 @@ const handlePageChange = (path, callback = function () {}) => {
 						const exampleElement = tempContainer.querySelector(".carouselItem");
 						if (exampleElement != null) {
 							setDisplay(mainContainer, "grid");
+							mainContainer.style.gridTemplateRows = "1fr 1fr";
 							const favoriteItems = tempContainer.querySelectorAll(".carouselItem"),
 								focusedFavoriteItem = favoriteItems[0];
 

@@ -1,5 +1,5 @@
 {% extends "base.html" %} {% block content %} {% if uid %}
-<div class="recipeCarouselContainer">
+<div class="recipeCarouselContainer userContainer">
 	<div class="carouselCategory">
 		<span class="fontCategory fontWhite"> Favorite Recipes</span>
 	</div>
@@ -29,11 +29,7 @@
 	</ul>
 </div>
 
-<<<<<<< HEAD
-<div class="recipeCreatedContainer" style="overflow-y: auto">
-=======
 <div class="recipeCreatedContainer">
->>>>>>> eee0edbf1224b8671240a5c78aa560deb8fd5f24
 	<div class="carouselCategory">
 		<span class="fontCategory fontWhite"> Created Recipes</span>
 	</div>
@@ -67,7 +63,7 @@
 	<div class="logoContainer">
 		<div class="logoWrapper">
 			<div class="imageContainer">
-				<img class="logoImage" src="{{ url_for('static', filename='images/Reciply_LOGO-removebg-preview.png') }}" />
+				<img class="logoImage" src="{{ url_for('static', filename='images/Reciply_LOGO-bottom-text.png') }}" />
 			</div>
 		</div>
 	</div>
